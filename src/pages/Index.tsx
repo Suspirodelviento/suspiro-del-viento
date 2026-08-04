@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2, Sparkles } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCERS } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
+import { CategoriesSection } from '../components/CategoriesSection';
 import { LunarCalendarWidget } from '../components/LunarCalendarWidget';
 import { PreparationsGuide } from '../components/PreparationsGuide';
+import { NewsletterSection } from '../components/NewsletterSection';
 import { Button } from '../components/ui/button';
 
 const Index: React.FC = () => {
@@ -13,11 +16,11 @@ const Index: React.FC = () => {
   const featuredProducts = products.slice(0, 4);
 
   return (
-    <div className="space-y-20 pb-16">
+    <div className="space-y-24 pb-20">
       
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-[#14261A]">
-        {/* Background image with gradient overlay */}
+      <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[#14261A]">
+        {/* Background image */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000"
@@ -29,20 +32,40 @@ const Index: React.FC = () => {
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 pt-12">
           
-          <div className="inline-flex items-center gap-2 bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#D4AF37] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#D4AF37] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase backdrop-blur-md"
+          >
             <ShieldCheck className="w-4 h-4" /> Certified Biodynamic Foods from Mendoza
-          </div>
+          </motion.div>
 
-          <h1 className="font-serif font-bold text-4xl sm:text-6xl md:text-7xl text-[#F4F1EA] tracking-tight leading-[1.1]">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="font-serif font-bold text-4xl sm:text-6xl md:text-7xl text-[#F4F1EA] tracking-tight leading-[1.1]"
+          >
             Real food begins with <br className="hidden sm:inline" />
             <span className="italic font-serif text-[#D4AF37]">living soil.</span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-base sm:text-xl text-[#D8D0C0] font-sans max-w-2xl mx-auto leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-base sm:text-xl text-[#D8D0C0] font-sans max-w-2xl mx-auto leading-relaxed"
+          >
             Discover certified biodynamic wines, cold-pressed olive oil, raw honey, and seasonal produce grown in Mendoza by artisans farming in harmony with nature.
-          </p>
+          </motion.p>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
             <Link to="/products">
               <Button className="bg-[#D4AF37] hover:bg-[#c29e2e] text-[#14261A] font-bold rounded-full h-13 px-8 text-sm shadow-xl flex items-center gap-2">
                 Shop Terroir Foods <ArrowRight className="w-4 h-4" />
@@ -60,10 +83,15 @@ const Index: React.FC = () => {
                 Meet Our Producers
               </Button>
             </Link>
-          </div>
+          </motion.div>
 
           {/* Quick stats bar */}
-          <div className="pt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-white/10 text-xs text-[#C8BFB0]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="pt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-white/10 text-xs text-[#C8BFB0]"
+          >
             <div>
               <strong className="block text-xl font-serif text-white">100%</strong>
               Demeter Certified
@@ -80,14 +108,20 @@ const Index: React.FC = () => {
               <strong className="block text-xl font-serif text-white">24h</strong>
               Mendoza Fresh Delivery
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Mendoza Terroir Introduction */}
+      {/* Mendoza Terroir Philosophy Introduction */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 space-y-6"
+          >
             <div className="flex items-center gap-2 text-xs uppercase font-bold tracking-widest text-[#284933]">
               <Leaf className="w-4 h-4" /> Not a Supermarket. A Living Sanctuary.
             </div>
@@ -110,9 +144,15 @@ const Index: React.FC = () => {
                 <p className="text-xs text-[#786D58] mt-1">Fruit and vegetables gathered on optimal astronomical days.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="lg:col-span-6 relative">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 relative"
+          >
             <div className="aspect-4/3 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <img
                 src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200"
@@ -126,9 +166,12 @@ const Index: React.FC = () => {
               </p>
               <span className="text-[10px] text-[#A69B88] block mt-2 uppercase font-bold tracking-wider">— Rudolf Steiner (1924)</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Categories Grid */}
+      <CategoriesSection />
 
       {/* Featured Products */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -158,7 +201,7 @@ const Index: React.FC = () => {
         <LunarCalendarWidget />
       </section>
 
-      {/* What is Biodynamic Agriculture Section */}
+      {/* Educational Hub Preview */}
       <section className="bg-[#FAF7F0] border-y border-[#E5DFCE] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
@@ -194,8 +237,12 @@ const Index: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {PRODUCERS.map((producer) => (
-            <div
+            <motion.div
               key={producer.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
               className="bg-white border border-[#E3DEC3] rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
@@ -236,10 +283,13 @@ const Index: React.FC = () => {
                   </Button>
                 </Link>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
+
+      {/* Newsletter Section */}
+      <NewsletterSection />
 
     </div>
   );
