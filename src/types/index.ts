@@ -85,3 +85,16 @@ export interface Order {
   paymentMethod: 'Mercado Pago' | 'Credit Card' | 'Bank Transfer';
   trackingCode: string;
 }
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  deliveryZone: string;
+  avatar: string;
+  memberTier: 'Socio Biodinámico' | 'Socio Recolector' | 'Gran Reserva';
+  memberSince: string;
+  favorites: string[];
+}

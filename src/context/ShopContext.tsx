@@ -1,15 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order } from '../types';
+import { Product, CartItem, Order, UserProfile } from '../types';
 import { PRODUCTS, MENDOZA_DELIVERY_ZONES } from '../data/mockData';
+import { getDefaultUser, MOCK_USERS, createMockUserFromInput } from '../utils/mockAuth';
 import { showSuccess, showError } from '../utils/toast';
-
-interface UserProfile {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  deliveryZone: string;
-}
 
 interface ShopContextType {
   products: Product[];
@@ -36,51 +29,51 @@ interface ShopContextType {
   setSearchQuery: (query: string) => void;
   selectedCategory: string;
   setSelectedCategory: (cat: string) => void;
-  // Auth state
+  // Auth state & mock methods
   isLoggedIn: boolean;
-  user: UserProfile | null;
-  login: (email: string, name: string) => void;
+  user: UserProfile;
+  login: (email: string, name?: string) => void;
+  switchUser: (userId: string) => void;
   logout: () => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
+  availableMockUsers: UserProfile[];
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products] = useState<Product[]>(PRODUCTS);
+  
+  // Dynamic User State
+  const [user, setUser] = useState<UserProfile>(() => {
+    const saved = localStorage.getItem('biomendoza_user');
+    return saved ? JSON.parse(saved) : getDefaultUser();
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    const saved = localStorage.getItem('biomendoza_logged_in');
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem('biomendoza_favs');
+    return saved ? JSON.parse(saved) : user.favorites;
+  });
+
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('biomendoza_cart');
     return saved ? JSON.parse(saved) : [];
   });
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    const saved = localStorage.getItem('biomendoza_favs');
-    return saved ? JSON.parse(saved) : ['malbec-biodinamico-2022', 'aceite-oliva-agrelo-demeter'];
-  });
+
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedZoneId, setSelectedZoneId] = useState<string>('zone-1');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  
-  // Auth state management
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    return localStorage.getItem('biomendoza_logged_in') === 'true';
-  });
-  const [user, setUser] = useState<UserProfile | null>(() => {
-    const saved = localStorage.getItem('biomendoza_user');
-    return saved
-      ? JSON.parse(saved)
-      : {
-          name: 'Sofía Rodríguez',
-          email: 'sofia.rodriguez@biomendoza.com',
-          phone: '+54 261 555 3912',
-          address: 'Av. Arístides Villanueva 420, Mendoza Capital',
-          deliveryZone: 'Mendoza Capital & Guaymallén'
-        };
-  });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
+  // Initial Mock Orders using user's real address
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('biomendoza_orders');
     return saved ? JSON.parse(saved) : [
@@ -90,8 +83,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         items: [{ product: PRODUCTS[0], quantity: 2 }, { product: PRODUCTS[1], quantity: 1 }],
         totalPrice: 51200,
         status: 'Delivered',
-        deliveryAddress: 'Av. Arístides Villanueva 420, Mendoza Capital',
-        deliveryZone: 'Mendoza Capital & Guaymallén',
+        deliveryAddress: user.address,
+        deliveryZone: user.deliveryZone,
         deliveryDate: '2024-11-11',
         paymentMethod: 'Mercado Pago',
         trackingCode: 'MP-MDZ-889102'
@@ -116,23 +109,27 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem('biomendoza_user', JSON.stringify(user));
-    }
+    localStorage.setItem('biomendoza_user', JSON.stringify(user));
   }, [user]);
 
-  const login = (email: string, name: string) => {
-    const newUser: UserProfile = {
-      name: name || 'Sofía Rodríguez',
-      email: email || 'sofia.rodriguez@biomendoza.com',
-      phone: '+54 261 555 3912',
-      address: 'Chacras de Coria, Luján de Cuyo',
-      deliveryZone: 'Luján de Cuyo y Chacras de Coria'
-    };
+  const login = (email: string, name?: string) => {
+    // Check if matching mock user
+    const existing = MOCK_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    const newUser = existing ? existing : createMockUserFromInput(email, name);
+
     setUser(newUser);
+    setFavorites(newUser.favorites);
     setIsLoggedIn(true);
     setIsAuthModalOpen(false);
     showSuccess(`¡Bienvenido de nuevo, ${newUser.name}!`);
+  };
+
+  const switchUser = (userId: string) => {
+    const targetUser = MOCK_USERS.find((u) => u.id === userId) || MOCK_USERS[0];
+    setUser(targetUser);
+    setFavorites(targetUser.favorites);
+    setIsLoggedIn(true);
+    showSuccess(`Sesión cambiada a ${targetUser.name}`);
   };
 
   const logout = () => {
@@ -207,7 +204,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       items: [...cart],
       totalPrice: cartTotal,
       status: 'Preparing',
-      deliveryAddress: address || user?.address || 'Chacras de Coria, Luján de Cuyo',
+      deliveryAddress: address || user.address,
       deliveryZone: activeZone.name,
       deliveryDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
       paymentMethod,
@@ -250,9 +247,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoggedIn,
         user,
         login,
+        switchUser,
         logout,
         isAuthModalOpen,
-        setIsAuthModalOpen
+        setIsAuthModalOpen,
+        availableMockUsers: MOCK_USERS
       }}
     >
       {children}

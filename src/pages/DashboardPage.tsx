@@ -1,11 +1,21 @@
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { ProductCard } from '../components/ProductCard';
-import { Package, Heart, LogIn, ShieldCheck, Truck, LogOut } from 'lucide-react';
+import { Package, Heart, LogIn, ShieldCheck, Truck, LogOut, User, Users, MapPin, Phone, Award } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 export const DashboardPage: React.FC = () => {
-  const { orders, favorites, products, isLoggedIn, user, setIsAuthModalOpen, logout } = useShop();
+  const {
+    orders,
+    favorites,
+    products,
+    isLoggedIn,
+    user,
+    setIsAuthModalOpen,
+    logout,
+    availableMockUsers,
+    switchUser
+  } = useShop();
 
   const favoriteProducts = products.filter((p) => favorites.includes(p.id));
 
@@ -34,31 +44,74 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
       
-      {/* Header */}
-      <div className="bg-[#1A3323] text-white p-8 rounded-3xl border border-[#2B523A] shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37]">Mendoza Member Account</span>
-          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-white mt-1">
-            Bienvenido/a, {user?.name}
-          </h1>
-          <p className="text-xs text-[#C8BFB0] mt-1">
-            Seguimiento de entregas de cajón de cosecha y favoritos guardados
-          </p>
+      {/* Header Profile Card */}
+      <div className="bg-[#1A3323] text-white p-8 rounded-3xl border border-[#2B523A] shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        
+        <div className="flex items-center gap-4">
+          <img
+            src={user.avatar}
+            alt={user.name}
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-[#D4AF37] shadow-md shrink-0"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#1A3323] bg-[#D4AF37] px-2.5 py-0.5 rounded-md inline-flex items-center gap-1">
+                <Award className="w-3 h-3" /> {user.memberTier}
+              </span>
+              <span className="text-xs text-[#A69B88]">Socio desde {user.memberSince}</span>
+            </div>
+            <h1 className="font-serif font-bold text-3xl text-white mt-1">
+              {user.name}
+            </h1>
+            <p className="text-xs text-[#C8BFB0] mt-0.5 flex items-center gap-2 flex-wrap">
+              <span>{user.email}</span>
+              <span>•</span>
+              <span className="flex items-center gap-1"><Phone className="w-3 h-3 text-[#D4AF37]" /> {user.phone}</span>
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="bg-[#244530] px-4 py-3 rounded-2xl border border-[#30593E] text-xs">
-            <span className="text-[#D4AF37] font-bold block">Zona de Entrega:</span>
-            <span className="text-white font-medium">{user?.deliveryZone || 'Mendoza Capital'}</span>
+        {/* User Switcher Quick Buttons */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+          <div className="bg-[#244530] p-3 rounded-2xl border border-[#30593E] text-xs">
+            <span className="text-[#D4AF37] font-bold block flex items-center gap-1">
+              <MapPin className="w-3 h-3" /> Dirección habitual:
+            </span>
+            <span className="text-white font-medium truncate max-w-[200px] block">{user.address}</span>
           </div>
 
           <button
             onClick={logout}
-            className="p-3 bg-[#244530] hover:bg-[#30593E] text-white rounded-2xl border border-[#30593E] transition-colors"
+            className="p-3 bg-[#244530] hover:bg-[#30593E] text-white rounded-2xl border border-[#30593E] transition-colors shrink-0"
             title="Cerrar Sesión"
           >
             <LogOut className="w-4 h-4 text-[#C85A32]" />
           </button>
+        </div>
+      </div>
+
+      {/* Quick Profile Switcher Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-[#E3DEC3] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <span className="font-bold text-[#1A3323] flex items-center gap-1.5">
+          <Users className="w-4 h-4 text-[#284933]" /> Cambiar Perfil de Usuario Mock:
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {availableMockUsers.map((u) => {
+            const isActive = u.id === user.id;
+            return (
+              <button
+                key={u.id}
+                onClick={() => switchUser(u.id)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  isActive
+                    ? 'bg-[#1A3323] text-[#D4AF37] shadow-xs'
+                    : 'bg-[#F2EFE8] text-[#524B3B] hover:bg-[#E5E0D0]'
+                }`}
+              >
+                {u.name}
+              </button>
+            );
+          })}
         </div>
       </div>
 

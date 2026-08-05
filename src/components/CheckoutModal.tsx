@@ -11,11 +11,13 @@ interface CheckoutModalProps {
 }
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose, onSuccess }) => {
-  const { cartTotal, selectedZoneId, placeOrder } = useShop();
+  const { cartTotal, selectedZoneId, placeOrder, user } = useShop();
   const [paymentMethod, setPaymentMethod] = useState<'Mercado Pago' | 'Credit Card' | 'Bank Transfer'>('Mercado Pago');
-  const [address, setAddress] = useState('Chacras de Coria, Luján de Cuyo, Mendoza');
-  const [name, setName] = useState('Sofia Rodriguez');
-  const [phone, setPhone] = useState('+54 261 555 3912');
+  
+  // Dynamic initialization from active user
+  const [address, setAddress] = useState(user.address);
+  const [name, setName] = useState(user.name);
+  const [phone, setPhone] = useState(user.phone);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<any>(null);
 

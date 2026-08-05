@@ -33,7 +33,6 @@ export const Navbar: React.FC = () => {
     }
   };
 
-  // Explicit required pages
   const navLinks = [
     { label: 'Inicio', path: '/' },
     { label: 'Tienda', path: '/products' },
@@ -95,7 +94,7 @@ export const Navbar: React.FC = () => {
               );
             })}
 
-            {/* Conditional Dashboard Link (Only visible if logged in) */}
+            {/* Conditional Dashboard Link */}
             {isLoggedIn && (
               <Link
                 to="/dashboard"
@@ -148,10 +147,10 @@ export const Navbar: React.FC = () => {
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/dashboard"
-                  className="flex items-center gap-1.5 text-xs text-[#1A3323] font-bold bg-[#EFF4EC] px-3 py-1.5 rounded-full border border-[#C8DAC0]"
+                  className="flex items-center gap-2 text-xs text-[#1A3323] font-bold bg-[#EFF4EC] px-3 py-1.5 rounded-full border border-[#C8DAC0]"
                 >
-                  <User className="w-3.5 h-3.5 text-[#284933]" />
-                  <span className="truncate max-w-[100px]">{user?.name.split(' ')[0]}</span>
+                  <img src={user.avatar} alt="" className="w-4 h-4 rounded-full object-cover shrink-0" />
+                  <span className="truncate max-w-[100px]">{user.name.split(' ')[0]}</span>
                 </Link>
                 <button
                   onClick={logout}
