@@ -475,4 +475,3 @@ export const CURRENT_LUNAR_STATUS = {
     'Bottling wine under turbulent wind conditions'
   ]
 };
-</dyad-data>
