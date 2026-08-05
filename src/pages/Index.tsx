@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2 } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCERS } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
 import { CategoriesSection } from '../components/CategoriesSection';
+import { WhyBiodynamicSection } from '../components/WhyBiodynamicSection';
 import { LunarCalendarWidget } from '../components/LunarCalendarWidget';
 import { PreparationsGuide } from '../components/PreparationsGuide';
+import { TestimonialsSection } from '../components/TestimonialsSection';
 import { NewsletterSection } from '../components/NewsletterSection';
 import { Button } from '../components/ui/button';
 
@@ -16,21 +18,21 @@ const Index: React.FC = () => {
   const featuredProducts = products.slice(0, 4);
 
   return (
-    <div className="space-y-24 pb-20">
+    <div className="space-y-24 pb-20 overflow-x-hidden">
       
-      {/* Hero Section */}
-      <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[#14261A]">
-        {/* Background image */}
+      {/* 1. Fullscreen Hero */}
+      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#14261A]">
+        {/* Cinematic background image with gradient overlay */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000"
-            alt="Mendoza Biodynamic Vineyard"
-            className="w-full h-full object-cover opacity-40 scale-105"
+            alt="Viñedo Biodinámico en Mendoza"
+            className="w-full h-full object-cover opacity-45 scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#14261A] via-[#14261A]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#14261A] via-[#14261A]/50 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 pt-12">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 pt-16">
           
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -38,7 +40,7 @@ const Index: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#D4AF37] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase backdrop-blur-md"
           >
-            <ShieldCheck className="w-4 h-4" /> Certified Biodynamic Foods from Mendoza
+            <ShieldCheck className="w-4 h-4" /> Alimentos 100% Biodinámicos Certificados de Mendoza
           </motion.div>
 
           <motion.h1
@@ -47,8 +49,8 @@ const Index: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="font-serif font-bold text-4xl sm:text-6xl md:text-7xl text-[#F4F1EA] tracking-tight leading-[1.1]"
           >
-            Real food begins with <br className="hidden sm:inline" />
-            <span className="italic font-serif text-[#D4AF37]">living soil.</span>
+            La comida de verdad nace en un <br className="hidden sm:inline" />
+            <span className="italic font-serif text-[#D4AF37]">suelo vivo.</span>
           </motion.h1>
 
           <motion.p
@@ -57,7 +59,7 @@ const Index: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-base sm:text-xl text-[#D8D0C0] font-sans max-w-2xl mx-auto leading-relaxed"
           >
-            Discover certified biodynamic wines, cold-pressed olive oil, raw honey, and seasonal produce grown in Mendoza by artisans farming in harmony with nature.
+            Descubrí vinos finos de reserva, aceite de oliva prensado en frío, miel pura de jarilla y hortalizas frescas cultivadas en Mendoza en perfecta consonancia con la naturaleza.
           </motion.p>
 
           <motion.div
@@ -68,19 +70,19 @@ const Index: React.FC = () => {
           >
             <Link to="/products">
               <Button className="bg-[#D4AF37] hover:bg-[#c29e2e] text-[#14261A] font-bold rounded-full h-13 px-8 text-sm shadow-xl flex items-center gap-2">
-                Shop Terroir Foods <ArrowRight className="w-4 h-4" />
+                Ver Productos <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
 
             <Link to="/education">
               <Button variant="outline" className="border-[#E3DEC8] text-[#F4F1EA] hover:bg-white/10 rounded-full h-13 px-8 text-sm font-semibold backdrop-blur-xs">
-                Learn Biodynamics <BookOpen className="w-4 h-4 ml-1" />
+                Aprender Biodinámica <BookOpen className="w-4 h-4 ml-1" />
               </Button>
             </Link>
 
             <Link to="/producers">
               <Button variant="ghost" className="text-[#C8BFB0] hover:text-white rounded-full h-13 px-6 text-sm">
-                Meet Our Producers
+                Conocer Productores
               </Button>
             </Link>
           </motion.div>
@@ -94,25 +96,25 @@ const Index: React.FC = () => {
           >
             <div>
               <strong className="block text-xl font-serif text-white">100%</strong>
-              Demeter Certified
+              Certificado Demeter
             </div>
             <div>
               <strong className="block text-xl font-serif text-white">0%</strong>
-              Synthetic Chemicals
+              Químicos Sintéticos
             </div>
             <div>
-              <strong className="block text-xl font-serif text-white">1,300m</strong>
-              High Andean Altitude
+              <strong className="block text-xl font-serif text-white">1.300m</strong>
+              Altitud Andina
             </div>
             <div>
               <strong className="block text-xl font-serif text-white">24h</strong>
-              Mendoza Fresh Delivery
+              Entrega Fresca en Mendoza
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Mendoza Terroir Philosophy Introduction */}
+      {/* 2. Biodynamic Philosophy Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <motion.div
@@ -123,25 +125,25 @@ const Index: React.FC = () => {
             className="lg:col-span-6 space-y-6"
           >
             <div className="flex items-center gap-2 text-xs uppercase font-bold tracking-widest text-[#284933]">
-              <Leaf className="w-4 h-4" /> Not a Supermarket. A Living Sanctuary.
+              <Leaf className="w-4 h-4" /> No es un supermercado. Es un santuario vivo.
             </div>
             <h2 className="font-serif font-bold text-3xl sm:text-5xl text-[#1A3323] leading-tight">
-              Direct connection to Mendoza’s most conscious growers.
+              Conexión directa con los agricultores más conscientes de Mendoza.
             </h2>
             <p className="text-sm text-[#524B3B] leading-relaxed">
-              BioMendoza is a curated marketplace born at the foot of the Andes mountains. Here, food is not mass-produced; it is harvested according to cosmic rhythms, nourished with horn manure preparations, and delivered with total transparency.
+              BioMendoza es un mercado curado nacido a los pies de la Cordillera de los Andes. Aquí la comida no se produce en masa: se cosecha respetando los ritmos astronómicos, se nutre con preparados naturales y se entrega con total transparencia.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 bg-white border border-[#E3DEC3] rounded-2xl">
+              <div className="p-4 bg-white border border-[#E3DEC3] rounded-2xl shadow-xs">
                 <ShieldCheck className="w-6 h-6 text-[#284933] mb-2" />
-                <h4 className="font-serif font-bold text-sm text-[#1A3323]">Demeter Certified</h4>
-                <p className="text-xs text-[#786D58] mt-1">100% verified compliance with global biodynamic standards.</p>
+                <h4 className="font-serif font-bold text-sm text-[#1A3323]">Garantía Demeter</h4>
+                <p className="text-xs text-[#786D58] mt-1">Cumplimiento verificado con estándares biodinámicos globales.</p>
               </div>
-              <div className="p-4 bg-white border border-[#E3DEC3] rounded-2xl">
+              <div className="p-4 bg-white border border-[#E3DEC3] rounded-2xl shadow-xs">
                 <Sun className="w-6 h-6 text-[#D4AF37] mb-2" />
-                <h4 className="font-serif font-bold text-sm text-[#1A3323]">Cosmic Rhythm Harvest</h4>
-                <p className="text-xs text-[#786D58] mt-1">Fruit and vegetables gathered on optimal astronomical days.</p>
+                <h4 className="font-serif font-bold text-sm text-[#1A3323]">Cosecha por Ritmos Cósmicos</h4>
+                <p className="text-xs text-[#786D58] mt-1">Frutas y verduras recolectadas en días astronómicos óptimos.</p>
               </div>
             </div>
           </motion.div>
@@ -156,13 +158,13 @@ const Index: React.FC = () => {
             <div className="aspect-4/3 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <img
                 src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200"
-                alt="Biodynamic Vineyard harvest"
+                alt="Cosecha de viñedo biodinámico"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-[#1A3323] text-white p-6 rounded-3xl shadow-xl max-w-xs hidden sm:block border border-[#2B523A]">
               <p className="text-xs font-serif italic text-[#D4AF37]">
-                "The farm is a single living entity where soil, plants, animals, and human spirit harmonize."
+                "La finca es un organismo vivo único donde el suelo, las plantas, los animales y el espíritu humano se armonizan."
               </p>
               <span className="text-[10px] text-[#A69B88] block mt-2 uppercase font-bold tracking-wider">— Rudolf Steiner (1924)</span>
             </div>
@@ -170,21 +172,24 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Categories Grid */}
+      {/* 3. Why Biodynamic Section */}
+      <WhyBiodynamicSection />
+
+      {/* 4. Product Categories Showcase */}
       <CategoriesSection />
 
-      {/* Featured Products */}
+      {/* 5. Featured Products Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 border-b border-[#E3DEC8] pb-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Curated Harvest</span>
-            <h2 className="font-serif font-bold text-3xl text-[#1A3323] mt-1">
-              Featured Biodynamic Foods & Wine
+            <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Cosecha Curada</span>
+            <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#1A3323] mt-1">
+              Productos Destacados del Terruño
             </h2>
           </div>
           <Link to="/products">
             <Button variant="ghost" className="text-[#1A3323] hover:text-[#C85A32] font-semibold text-xs flex items-center gap-1">
-              View Entire Collection ({products.length}) <ArrowRight className="w-4 h-4" />
+              Ver Colección Completa ({products.length}) <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </div>
@@ -196,42 +201,41 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Lunar Calendar Interactive Widget */}
+      {/* 6. Lunar Calendar Widget */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <LunarCalendarWidget />
       </section>
 
-      {/* Educational Hub Preview */}
+      {/* 7. Educational Section (Preparations Guide) */}
       <section className="bg-[#FAF7F0] border-y border-[#E5DFCE] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs uppercase font-bold tracking-widest text-[#284933] bg-[#E2EAD8] px-3 py-1 rounded-full">
-              Educational Focus
+              Enfoque Educativo
             </span>
             <h2 className="font-serif font-bold text-3xl sm:text-5xl text-[#1A3323]">
-              What is Biodynamic Agriculture?
+              ¿Qué es la Agricultura Biodinámica?
             </h2>
             <p className="text-xs sm:text-sm text-[#625846] leading-relaxed">
-              It is the oldest ecological, chemical-free farming system in the world. Biodynamics treats the farm as a self-sustaining organism, generating its own fertility through compost, horn preparations, and animal integration.
+              Es el sistema de agricultura ecológica libre de agroquímicos más antiguo del mundo. Concibe la finca como un organismo autosostenible que genera su propia fertilidad mediante compost, preparados de cuerno e integración animal.
             </p>
           </div>
 
-          {/* Preparations Guide Interactive Widget */}
           <PreparationsGuide />
 
         </div>
       </section>
 
-      {/* Meet the Producers */}
+      {/* 8. Meet the Producers Preview */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Mendoza Artisans</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Artesanos de Mendoza</span>
           <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#1A3323]">
-            Meet Our Certified Producers
+            Nuestros Productores Certificados
           </h2>
           <p className="text-xs text-[#625846]">
-            Every bottle, jar, and harvest box is traceable back to these dedicated families in Valle de Uco, Agrelo, and Luján.
+            Cada botella, frasco y caja de cosecha es trazable hasta estas familias en el Valle de Uco, Agrelo y Luján.
           </p>
         </div>
 
@@ -270,7 +274,7 @@ const Index: React.FC = () => {
                       <CheckCircle2 className="w-3.5 h-3.5" /> {producer.certification}
                     </div>
                     <div className="text-[#8A7E68]">
-                      Farming biodynamically for {producer.yearsFarming} years ({producer.sizeHectares} Hectares)
+                      Cultivando biodinámicamente hace {producer.yearsFarming} años ({producer.sizeHectares} Hectáreas)
                     </div>
                   </div>
                 </div>
@@ -279,7 +283,7 @@ const Index: React.FC = () => {
               <div className="p-6 pt-0">
                 <Link to={`/producers/${producer.id}`}>
                   <Button className="w-full bg-[#EFECE3] hover:bg-[#1A3323] text-[#1A3323] hover:text-white rounded-xl text-xs font-semibold h-11 transition-colors">
-                    View Farm Profile & Story
+                    Ver Perfil e Historia de la Finca
                   </Button>
                 </Link>
               </div>
@@ -288,7 +292,10 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
+      {/* 9. Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* 10. Newsletter Section */}
       <NewsletterSection />
 
     </div>

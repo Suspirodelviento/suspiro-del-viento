@@ -26,17 +26,21 @@ export const PreparationsGuide: React.FC = () => {
     <div className="space-y-8">
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2 justify-center">
-        {(['All', 'Field Spray', 'Compost Additive'] as const).map((type) => (
+        {[
+          { key: 'All', label: 'Todos los Preparados (500–508)' },
+          { key: 'Field Spray', label: 'Preparados de Campo' },
+          { key: 'Compost Additive', label: 'Aditivos para Compost' }
+        ].map((tab) => (
           <button
-            key={type}
-            onClick={() => setFilterType(type)}
+            key={tab.key}
+            onClick={() => setFilterType(tab.key as any)}
             className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
-              filterType === type
+              filterType === tab.key
                 ? 'bg-[#1A3323] text-[#F4F1EA] shadow-md'
                 : 'bg-[#EFECE3] text-[#524B3B] hover:bg-[#E2DDD0]'
             }`}
           >
-            {type === 'All' ? 'All Preparations (500–508)' : type}
+            {tab.label}
           </button>
         ))}
       </div>
@@ -72,7 +76,7 @@ export const PreparationsGuide: React.FC = () => {
                         isSelected ? 'text-[#C8BFB0]' : 'text-[#8A7E68]'
                       }`}
                     >
-                      {prep.type}
+                      {prep.type === 'Field Spray' ? 'Pulverización de Campo' : 'Aditivo de Compost'}
                     </span>
                   </div>
                 </div>
@@ -87,7 +91,7 @@ export const PreparationsGuide: React.FC = () => {
           <div className="flex items-center justify-between border-b border-[#F0ECE1] pb-4">
             <div>
               <span className="text-xs uppercase font-bold tracking-widest text-[#284933] bg-[#EFF4EC] px-3 py-1 rounded-full">
-                Preparation {selectedPrep.number} • {selectedPrep.type}
+                Preparado {selectedPrep.number} • {selectedPrep.type === 'Field Spray' ? 'Pulverización' : 'Inóculo de Compost'}
               </span>
               <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#1A3323] mt-2">
                 {selectedPrep.name}
@@ -103,7 +107,7 @@ export const PreparationsGuide: React.FC = () => {
 
           <div className="space-y-4 text-xs text-[#4A4234] leading-relaxed">
             <div>
-              <h5 className="font-bold text-[#1A3323] text-sm mb-1">What is it?</h5>
+              <h5 className="font-bold text-[#1A3323] text-sm mb-1">¿Qué es?</h5>
               <p className="bg-[#FBF9F5] p-3.5 rounded-xl border border-[#EDE8DA]">
                 {selectedPrep.description}
               </p>
@@ -111,18 +115,18 @@ export const PreparationsGuide: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-3.5 bg-[#FBF9F5] rounded-xl border border-[#EDE8DA]">
-                <strong className="block text-[#1A3323] font-bold mb-1">Ingredients & Fermentation:</strong>
+                <strong className="block text-[#1A3323] font-bold mb-1">Componentes y Fermentación:</strong>
                 <p className="text-[#625846]">{selectedPrep.ingredients}</p>
               </div>
 
               <div className="p-3.5 bg-[#FBF9F5] rounded-xl border border-[#EDE8DA]">
-                <strong className="block text-[#1A3323] font-bold mb-1">Application & Rhythm:</strong>
+                <strong className="block text-[#1A3323] font-bold mb-1">Aplicación y Ritmo:</strong>
                 <p className="text-[#625846]">{selectedPrep.usage}</p>
               </div>
             </div>
 
             <div>
-              <h5 className="font-bold text-[#1A3323] text-sm mb-2">Key Soil & Plant Benefits:</h5>
+              <h5 className="font-bold text-[#1A3323] text-sm mb-2">Beneficios para el Suelo y la Planta:</h5>
               <ul className="space-y-1.5">
                 {selectedPrep.benefits.map((b, i) => (
                   <li key={i} className="flex items-start gap-2 bg-[#EFF4EC] p-2.5 rounded-lg text-[#1A3323]">

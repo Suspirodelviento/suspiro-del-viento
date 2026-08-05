@@ -13,7 +13,7 @@ export const NewsletterSection: React.FC = () => {
     e.preventDefault();
     if (email.trim()) {
       setSubmitted(true);
-      showSuccess('Subscribed to the Living Terroir Journal!');
+      showSuccess('¡Suscrito a la Bitácora del Terruño!');
     }
   };
 
@@ -31,13 +31,13 @@ export const NewsletterSection: React.FC = () => {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
-              <Leaf className="w-4 h-4" /> The Living Terroir Journal
+              <Leaf className="w-4 h-4" /> Bitácora del Terruño Vivo
             </span>
             <h2 className="font-serif font-bold text-3xl sm:text-4xl text-white leading-tight">
-              Stay connected with Mendoza’s seasonal soil cycles.
+              Estar en sintonía con los ciclos del suelo mendocino.
             </h2>
             <p className="text-xs sm:text-sm text-[#C8BFB0] leading-relaxed max-w-xl">
-              Receive our monthly astronomical planting guide, notification of micro-batch wine allocations, and invites to biodynamic preparation workshops in Uco Valley.
+              Recibí mensualmente nuestro calendario de siembra astronómico, notificación de partidas limitadas de vino y talleres de compost biodinámico en el Valle de Uco.
             </p>
           </div>
 
@@ -45,15 +45,15 @@ export const NewsletterSection: React.FC = () => {
             {submitted ? (
               <div className="bg-[#244530] p-4 rounded-2xl border border-[#30593E] text-xs space-y-1 text-[#E3DCCE]">
                 <div className="flex items-center gap-2 text-[#D4AF37] font-bold text-sm">
-                  <CheckCircle2 className="w-4 h-4" /> Welcome to BioMendoza Journal
+                  <CheckCircle2 className="w-4 h-4" /> Bienvenido a la Bitácora
                 </div>
-                <p>We've sent your first monthly cosmic calendar guide to {email}.</p>
+                <p>Enviamos tu primer calendario astronómico a {email}.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
                 <Input
                   type="email"
-                  placeholder="Your email address"
+                  placeholder="Tu correo electrónico"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-[#14261A] border-[#2A4B35] text-white text-xs h-12 rounded-xl placeholder:text-[#887D6B] flex-1"
@@ -63,7 +63,7 @@ export const NewsletterSection: React.FC = () => {
                   type="submit"
                   className="bg-[#D4AF37] hover:bg-[#b8952b] text-[#14261A] font-bold rounded-xl h-12 px-6 text-xs shrink-0 shadow-md"
                 >
-                  Subscribe <ArrowRight className="w-4 h-4 ml-1" />
+                  Suscribirme <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </form>
             )}

@@ -1,16 +1,35 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck, Heart } from 'lucide-react';
+import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIES = [
-  { name: 'Wine', desc: 'High-altitude Malbec & natural ferments', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Olive Oil', desc: 'Cold-pressed Arauco from 80-year groves', icon: Sun, image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Honey', desc: 'Unheated wild Andean Jarilla blossoms', icon: Sparkles, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Fresh Vegetables', desc: 'Harvested sunrise on delivery day', icon: Sprout, image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Fruits', desc: 'High-altitude mountain apples & quinces', icon: Leaf, image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Flours', desc: 'Stone-milled whole rye & heirloom grains', icon: Flame, image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Olive Oil', label: 'Aceites de Oliva', desc: 'Variedad Arauco prensada en frío de olivares de 80 años', icon: Sun, image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Honey', label: 'Mieles Puras', desc: 'Miel cruda de flor silvestre de jarilla andina', icon: Sparkles, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&<dyad-write path="src/components/CategoriesSection.tsx" description="Translating Categories section titles, categories names, and descriptions into Spanish">
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck } from 'lucide-react';
+import { useShop } from '../context/ShopContext';
+import { useNavigate } from 'react-router-dom';
+
+const CATEGORIES = [
+  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
+  { name<dyad-write path="src/components/CategoriesSection.tsx" description="Translating Categories section titles, categories names, and descriptions into Spanish">
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck } from 'lucide-react';
+import { useShop } from '../context/ShopContext';
+import { useNavigate } from 'react-router-dom';
+
+const CATEGORIES = [
+  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Olive Oil', label: 'Aceites de Oliva', desc: 'Variedad Arauco prensada en frío de olivares de 80 años', icon: Sun, image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Honey', label: 'Mieles Puras', desc: 'Miel cruda sin calentar de jarilla andina silvestre', icon: Sparkles, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Fresh Vegetables', label: 'Hortalizas Frescas', desc: 'Cosechadas al amanecer del día de entrega', icon: Sprout, image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Fruits', label: 'Frutas de Montaña', desc: 'Manzanas criollas y membrillos de gran altitud', icon: Leaf, image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Flours', label: 'Harinas Molidas a Piedra', desc: 'Centeno entero y cereales de molienda artesanal', icon: Flame, image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600' },
 ];
 
 export const CategoriesSection: React.FC = () => {
@@ -27,14 +46,14 @@ export const CategoriesSection: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 border-b border-[#E3DEC8] pb-4">
         <div>
           <span className="text-xs uppercase font-bold tracking-widest text-[#284933] bg-[#E2EAD8] px-3 py-1 rounded-full inline-flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5" /> Direct Terroir Pantry
+            <ShieldCheck className="w-3.5 h-3.5" /> Alacena Directa del Terruño
           </span>
           <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#1A3323] mt-2">
-            Explore Biodynamic Harvest Categories
+            Explorá las Categorías Biodinámicas
           </h2>
         </div>
         <p className="text-xs text-[#786D58] max-w-md">
-          Strictly chemical-free, harvested according to Maria Thun's cosmic lunar calendar.
+          Estrictamente libres de agroquímicos y recolectadas según el calendario cósmico astronómico.
         </p>
       </div>
 
@@ -54,7 +73,7 @@ export const CategoriesSection: React.FC = () => {
               {/* Image Background */}
               <img
                 src={cat.image}
-                alt={cat.name}
+                alt={cat.label}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
 
@@ -69,7 +88,7 @@ export const CategoriesSection: React.FC = () => {
 
                 <div>
                   <h3 className="font-serif font-bold text-2xl text-white group-hover:text-[#D4AF37] transition-colors">
-                    {cat.name}
+                    {cat.label}
                   </h3>
                   <p className="text-xs text-[#E3DCCE] mt-1 line-clamp-1 font-sans">
                     {cat.desc}

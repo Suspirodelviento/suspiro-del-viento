@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Heart, Search, Menu, X, Leaf, Compass, BookOpen, Sparkles, User, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Heart, Search, Menu, X, Leaf, Sparkles, User, ShieldCheck } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -23,10 +23,10 @@ export const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { label: 'Shop Foods & Wine', path: '/products' },
-    { label: 'What is Biodynamics?', path: '/education' },
-    { label: 'Our Mendoza Producers', path: '/producers' },
-    { label: 'Stories & Journal', path: '/blog' },
+    { label: 'Mercado Biodinámico', path: '/products' },
+    { label: '¿Qué es la Biodinámica?', path: '/education' },
+    { label: 'Productores de Mendoza', path: '/producers' },
+    { label: 'Historias & Bitácora', path: '/blog' },
   ];
 
   return (
@@ -34,12 +34,12 @@ export const Navbar: React.FC = () => {
       {/* Top Banner */}
       <div className="bg-[#1A3323] text-[#F4F1EA] text-xs py-2 px-4 text-center flex items-center justify-center gap-3 tracking-wide font-medium">
         <span className="flex items-center gap-1 text-[#D4AF37]">
-          <ShieldCheck className="w-3.5 h-3.5" /> 100% Certified Biodynamic
+          <ShieldCheck className="w-3.5 h-3.5" /> 100% Biodinámico Certificado
         </span>
         <span className="hidden md:inline">•</span>
-        <span className="hidden md:inline">Direct from Mendoza Estates to your door</span>
+        <span className="hidden md:inline">Directo desde fincas mendocinas a tu puerta</span>
         <span>•</span>
-        <span className="underline decoration-[#D4AF37]/50 underline-offset-2">Free Mendoza Delivery over $12,000 ARS</span>
+        <span className="underline decoration-[#D4AF37]/50 underline-offset-2">Envío gratis en Mendoza desde $12.000 ARS</span>
       </div>
 
       {/* Main Header */}
@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
                 BioMendoza
               </span>
               <span className="text-[10px] text-[#6B5E4A] tracking-widest uppercase block -mt-1 font-sans">
-                Biodynamic Terroir
+                Terruño Biodinámico
               </span>
             </div>
           </Link>
@@ -88,7 +88,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => setSearchModalOpen(true)}
               className="p-2 text-[#524B3B] hover:text-[#1A3323] hover:bg-[#EFECE3] rounded-full transition-colors"
-              title="Search products or farms"
+              title="Buscar productos o fincas"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -97,7 +97,7 @@ export const Navbar: React.FC = () => {
             <Link
               to="/dashboard"
               className="p-2 text-[#524B3B] hover:text-[#1A3323] hover:bg-[#EFECE3] rounded-full transition-colors relative"
-              title="Saved Favorites"
+              title="Favoritos guardados"
             >
               <Heart className="w-5 h-5" />
               {favorites.length > 0 && (
@@ -113,15 +113,7 @@ export const Navbar: React.FC = () => {
               className="hidden sm:flex items-center gap-1.5 text-xs text-[#524B3B] hover:text-[#1A3323] px-3 py-1.5 rounded-full border border-[#D5CFC0] hover:border-[#1A3323] transition-colors"
             >
               <User className="w-4 h-4" />
-              <span>Account</span>
-            </Link>
-
-            {/* Admin Link shortcut */}
-            <Link
-              to="/admin"
-              className="hidden sm:inline-flex text-[11px] font-medium text-[#1A3323] bg-[#E2EAD8] hover:bg-[#d0dfc1] px-2.5 py-1 rounded-md transition-colors"
-            >
-              Admin
+              <span>Mi Cuenta</span>
             </Link>
 
             {/* Cart Button */}
@@ -130,7 +122,7 @@ export const Navbar: React.FC = () => {
               className="bg-[#1A3323] hover:bg-[#284933] text-[#F4F1EA] rounded-full px-4 py-2 flex items-center gap-2 transition-all shadow-md"
             >
               <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-xs font-semibold hidden sm:inline">Cart</span>
+              <span className="text-xs font-semibold hidden sm:inline">Carrito</span>
               {cartCount > 0 && (
                 <span className="bg-[#D4AF37] text-[#1A3323] font-bold text-xs rounded-full px-2 py-0.5">
                   {cartCount}
@@ -156,7 +148,7 @@ export const Navbar: React.FC = () => {
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2 text-[#1A3323] font-serif font-bold text-lg">
                 <Sparkles className="w-5 h-5 text-[#D4AF37]" />
-                Search BioMendoza Terroir
+                Buscador BioMendoza
               </div>
               <button
                 onClick={() => setSearchModalOpen(false)}
@@ -169,20 +161,20 @@ export const Navbar: React.FC = () => {
             <form onSubmit={handleSearchSubmit} className="flex gap-2">
               <Input
                 type="text"
-                placeholder="Search Malbec, Olive Oil, Raw Honey, Preparation 500, Uco Valley..."
+                placeholder="Buscar Malbec, Aceite de Oliva, Miel de Jarilla, Cesta de cosecha, Valle de Uco..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-white border-[#C8C2B0] text-[#1A3323] rounded-xl h-12 focus-visible:ring-[#1A3323]"
                 autoFocus
               />
               <Button type="submit" className="bg-[#1A3323] text-white rounded-xl h-12 px-6">
-                Search
+                Buscar
               </Button>
             </form>
 
             <div className="mt-4 flex flex-wrap gap-2 text-xs text-[#524B3B]">
-              <span className="font-semibold text-[#1A3323]">Popular Searches:</span>
-              {['Malbec 2022', 'Extra Virgin Olive Oil', 'Raw Jarilla Honey', 'Harvest Box', 'Demeter Certified'].map((term) => (
+              <span className="font-semibold text-[#1A3323]">Búsquedas frecuentes:</span>
+              {['Malbec 2022', 'Aceite Extra Virgen', 'Miel de Jarilla', 'Caja Cosecha', 'Certificado Demeter'].map((term) => (
                 <button
                   key={term}
                   onClick={() => {
@@ -220,14 +212,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-sm text-[#1A3323] font-medium flex items-center gap-2"
               >
-                <User className="w-4 h-4" /> Account & Orders
-              </Link>
-              <Link
-                to="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-xs bg-[#E2EAD8] text-[#1A3323] px-3 py-1.5 rounded-md font-medium"
-              >
-                Admin Panel
+                <User className="w-4 h-4" /> Mi Cuenta & Pedidos
               </Link>
             </div>
           </div>
