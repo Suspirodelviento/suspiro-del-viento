@@ -5,31 +5,48 @@ import { useShop } from '../context/ShopContext';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIES = [
-  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Olive Oil', label: 'Aceites de Oliva', desc: 'Variedad Arauco prensada en frío de olivares de 80 años', icon: Sun, image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Honey', label: 'Mieles Puras', desc: 'Miel cruda de flor silvestre de jarilla andina', icon: Sparkles, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&<dyad-write path="src/components/CategoriesSection.tsx" description="Translating Categories section titles, categories names, and descriptions into Spanish">
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck } from 'lucide-react';
-import { useShop } from '../context/ShopContext';
-import { useNavigate } from 'react-router-dom';
-
-const CATEGORIES = [
-  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
-  { name<dyad-write path="src/components/CategoriesSection.tsx" description="Translating Categories section titles, categories names, and descriptions into Spanish">
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Wine, Sparkles, Sprout, Sun, Leaf, Flame, ShieldCheck } from 'lucide-react';
-import { useShop } from '../context/ShopContext';
-import { useNavigate } from 'react-router-dom';
-
-const CATEGORIES = [
-  { name: 'Wine', label: 'Vinos Reserva', desc: 'Malbec de altura y fermentaciones naturales', icon: Wine, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Olive Oil', label: 'Aceites de Oliva', desc: 'Variedad Arauco prensada en frío de olivares de 80 años', icon: Sun, image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Honey', label: 'Mieles Puras', desc: 'Miel cruda sin calentar de jarilla andina silvestre', icon: Sparkles, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Fresh Vegetables', label: 'Hortalizas Frescas', desc: 'Cosechadas al amanecer del día de entrega', icon: Sprout, image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Fruits', label: 'Frutas de Montaña', desc: 'Manzanas criollas y membrillos de gran altitud', icon: Leaf, image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Flours', label: 'Harinas Molidas a Piedra', desc: 'Centeno entero y cereales de molienda artesanal', icon: Flame, image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600' },
+  {
+    name: 'Wine',
+    label: 'Vinos Reserva',
+    desc: 'Malbec de altura y fermentaciones naturales',
+    icon: Wine,
+    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    name: 'Olive Oil',
+    label: 'Aceites de Oliva',
+    desc: 'Variedad Arauco prensada en frío de olivares de 80 años',
+    icon: Sun,
+    image: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    name: 'Honey',
+    label: 'Mieles Puras',
+    desc: 'Miel cruda sin calentar de jarilla andina silvestre',
+    icon: Sparkles,
+    image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    name: 'Fresh Vegetables',
+    label: 'Hortalizas Frescas',
+    desc: 'Cosechadas al amanecer del día de entrega',
+    icon: Sprout,
+    image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    name: 'Fruits',
+    label: 'Frutas de Montaña',
+    desc: 'Manzanas criollas y membrillos de gran altitud',
+    icon: Leaf,
+    image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    name: 'Flours',
+    label: 'Harinas Molidas a Piedra',
+    desc: 'Centeno entero y cereales de molienda artesanal',
+    icon: Flame,
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600'
+  }
 ];
 
 export const CategoriesSection: React.FC = () => {
