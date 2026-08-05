@@ -13,6 +13,7 @@ import { AIBiodynamicChatbot } from "./components/AIBiodynamicChatbot";
 
 import Index from "./pages/Index";
 import { ProductsPage } from "./pages/ProductsPage";
+import { ProductDetailPage } from "./pages/ProductDetailPage";
 import { EducationPage } from "./pages/EducationPage";
 import { ProducersPage } from "./pages/ProducersPage";
 import { ProducerDetailPage } from "./pages/ProducerDetailPage";
@@ -39,6 +40,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/products" element={<ProductsPage />} />
+                <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/education" element={<EducationPage />} />
                 <Route path="/producers" element={<ProducersPage />} />
                 <Route path="/producers/:id" element={<ProducerDetailPage />} />
