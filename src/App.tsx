@@ -8,6 +8,7 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { CartDrawer } from "./components/CartDrawer";
 import { ProductDetailModal } from "./components/ProductDetailModal";
+import { AuthModal } from "./components/AuthModal";
 import { AIBiodynamicChatbot } from "./components/AIBiodynamicChatbot";
 
 import Index from "./pages/Index";
@@ -16,6 +17,8 @@ import { EducationPage } from "./pages/EducationPage";
 import { ProducersPage } from "./pages/ProducersPage";
 import { ProducerDetailPage } from "./pages/ProducerDetailPage";
 import { BlogPage } from "./pages/BlogPage";
+import { AboutPage } from "./pages/AboutPage";
+import { ContactPage } from "./pages/ContactPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { AdminPage } from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
@@ -40,6 +43,8 @@ const App = () => (
                 <Route path="/producers" element={<ProducersPage />} />
                 <Route path="/producers/:id" element={<ProducerDetailPage />} />
                 <Route path="/blog" element={<BlogPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<NotFound />} />
@@ -49,6 +54,7 @@ const App = () => (
             <Footer />
             <CartDrawer />
             <ProductDetailModal />
+            <AuthModal />
             <AIBiodynamicChatbot />
           </div>
         </BrowserRouter>

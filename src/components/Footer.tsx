@@ -58,15 +58,16 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Navigation Links */}
           <div className="space-y-3">
-            <h4 className="font-serif font-bold text-sm text-white">Mercado</h4>
+            <h4 className="font-serif font-bold text-sm text-white">Navegación</h4>
             <ul className="space-y-2 text-[#B3AA9B]">
-              <li><Link to="/products" className="hover:text-white transition-colors">Malbec Reserva & Vinos</Link></li>
-              <li><Link to="/products" className="hover:text-white transition-colors">Aceite de Oliva Extra Virgen</Link></li>
-              <li><Link to="/products" className="hover:text-white transition-colors">Miel de Jarilla Pura</Link></li>
-              <li><Link to="/products" className="hover:text-white transition-colors">Cajón de Cosecha</Link></li>
-              <li><Link to="/products" className="hover:text-white transition-colors">Té de Hierbas Andinas</Link></li>
+              <li><Link to="/" className="hover:text-white transition-colors">Inicio</Link></li>
+              <li><Link to="/products" className="hover:text-white transition-colors">Tienda Biodinámica</Link></li>
+              <li><Link to="/producers" className="hover:text-white transition-colors">Nuestros Productores</Link></li>
+              <li><Link to="/education" className="hover:text-white transition-colors">Aprender Biodinámica</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">Nosotros</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contacto</Link></li>
             </ul>
           </div>
 

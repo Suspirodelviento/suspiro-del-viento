@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Heart, Search, Menu, X, Leaf, Sparkles, User, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Heart, Search, Menu, X, Leaf, Sparkles, User, ShieldCheck, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -8,7 +8,18 @@ import { Input } from './ui/input';
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cart, favorites, setIsCartOpen, searchQuery, setSearchQuery } = useShop();
+  const {
+    cart,
+    favorites,
+    setIsCartOpen,
+    searchQuery,
+    setSearchQuery,
+    isLoggedIn,
+    logout,
+    setIsAuthModalOpen,
+    user
+  } = useShop();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
@@ -22,11 +33,14 @@ export const Navbar: React.FC = () => {
     }
   };
 
+  // Explicit required pages
   const navLinks = [
-    { label: 'Mercado Biodinámico', path: '/products' },
-    { label: '¿Qué es la Biodinámica?', path: '/education' },
-    { label: 'Productores de Mendoza', path: '/producers' },
-    { label: 'Historias & Bitácora', path: '/blog' },
+    { label: 'Inicio', path: '/' },
+    { label: 'Tienda', path: '/products' },
+    { label: 'Productores', path: '/producers' },
+    { label: 'Aprender', path: '/education' },
+    { label: 'Nosotros', path: '/about' },
+    { label: 'Contacto', path: '/contact' },
   ];
 
   return (
@@ -62,15 +76,15 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-sm font-medium transition-colors hover:text-[#1A3323] relative py-1 ${
-                    isActive ? 'text-[#1A3323] font-semibold' : 'text-[#524B3B]'
+                  className={`text-xs font-semibold uppercase tracking-wider transition-colors hover:text-[#1A3323] relative py-1 ${
+                    isActive ? 'text-[#1A3323]' : 'text-[#625846]'
                   }`}
                 >
                   {link.label}
@@ -80,10 +94,26 @@ export const Navbar: React.FC = () => {
                 </Link>
               );
             })}
+
+            {/* Conditional Dashboard Link (Only visible if logged in) */}
+            {isLoggedIn && (
+              <Link
+                to="/dashboard"
+                className={`text-xs font-semibold uppercase tracking-wider transition-colors hover:text-[#1A3323] relative py-1 flex items-center gap-1 ${
+                  location.pathname === '/dashboard' ? 'text-[#1A3323]' : 'text-[#C85A32]'
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>Dashboard</span>
+                {location.pathname === '/dashboard' && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#C85A32] rounded-full" />
+                )}
+              </Link>
+            )}
           </nav>
 
           {/* Right Utilities */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2.5">
             {/* Search Button */}
             <button
               onClick={() => setSearchModalOpen(true)}
@@ -95,7 +125,13 @@ export const Navbar: React.FC = () => {
 
             {/* Wishlist */}
             <Link
-              to="/dashboard"
+              to={isLoggedIn ? "/dashboard" : "#"}
+              onClick={(e) => {
+                if (!isLoggedIn) {
+                  e.preventDefault();
+                  setIsAuthModalOpen(true);
+                }
+              }}
               className="p-2 text-[#524B3B] hover:text-[#1A3323] hover:bg-[#EFECE3] rounded-full transition-colors relative"
               title="Favoritos guardados"
             >
@@ -107,14 +143,33 @@ export const Navbar: React.FC = () => {
               )}
             </Link>
 
-            {/* User Account / Dashboard */}
-            <Link
-              to="/dashboard"
-              className="hidden sm:flex items-center gap-1.5 text-xs text-[#524B3B] hover:text-[#1A3323] px-3 py-1.5 rounded-full border border-[#D5CFC0] hover:border-[#1A3323] transition-colors"
-            >
-              <User className="w-4 h-4" />
-              <span>Mi Cuenta</span>
-            </Link>
+            {/* User Login/Dashboard Button */}
+            {isLoggedIn ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-1.5 text-xs text-[#1A3323] font-bold bg-[#EFF4EC] px-3 py-1.5 rounded-full border border-[#C8DAC0]"
+                >
+                  <User className="w-3.5 h-3.5 text-[#284933]" />
+                  <span className="truncate max-w-[100px]">{user?.name.split(' ')[0]}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="p-1.5 text-gray-500 hover:text-red-600 rounded-full hover:bg-gray-100"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-[#1A3323] px-3.5 py-1.5 rounded-full border border-[#1A3323] hover:bg-[#1A3323] hover:text-white transition-all shadow-xs"
+              >
+                <LogIn className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span>Ingresar</span>
+              </button>
+            )}
 
             {/* Cart Button */}
             <Button
@@ -194,27 +249,38 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[112px] bg-[#FBF9F5] border-b border-[#D8D2C2] z-30 p-6 shadow-xl animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col space-y-4">
+        <div className="lg:hidden fixed inset-x-0 top-[112px] bg-[#FBF9F5] border-b border-[#D8D2C2] z-30 p-6 shadow-xl animate-in slide-in-from-top duration-200 space-y-3">
+          <div className="flex flex-col space-y-3">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-serif font-medium text-[#1A3323] hover:text-[#C85A32] border-b border-[#E8E3D5] pb-3"
+                className="text-sm font-serif font-bold text-[#1A3323] hover:text-[#C85A32] border-b border-[#E8E3D5] pb-2.5"
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 flex justify-between items-center">
+
+            {isLoggedIn ? (
               <Link
                 to="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-sm text-[#1A3323] font-medium flex items-center gap-2"
+                className="text-sm font-bold text-[#C85A32] border-b border-[#E8E3D5] pb-2.5 flex items-center gap-2"
               >
-                <User className="w-4 h-4" /> Mi Cuenta & Pedidos
+                <LayoutDashboard className="w-4 h-4" /> Dashboard de Socio
               </Link>
-            </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setIsAuthModalOpen(true);
+                }}
+                className="text-sm font-bold text-[#1A3323] border-b border-[#E8E3D5] pb-2.5 text-left flex items-center gap-2"
+              >
+                <LogIn className="w-4 h-4 text-[#D4AF37]" /> Iniciar Sesión / Registrarme
+              </button>
+            )}
           </div>
         </div>
       )}

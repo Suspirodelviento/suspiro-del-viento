@@ -3,10 +3,18 @@ import { Product, CartItem, Order } from '../types';
 import { PRODUCTS, MENDOZA_DELIVERY_ZONES } from '../data/mockData';
 import { showSuccess, showError } from '../utils/toast';
 
+interface UserProfile {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  deliveryZone: string;
+}
+
 interface ShopContextType {
   products: Product[];
   cart: CartItem[];
-  favorites: string[]; // product IDs
+  favorites: string[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -28,6 +36,13 @@ interface ShopContextType {
   setSearchQuery: (query: string) => void;
   selectedCategory: string;
   setSelectedCategory: (cat: string) => void;
+  // Auth state
+  isLoggedIn: boolean;
+  user: UserProfile | null;
+  login: (email: string, name: string) => void;
+  logout: () => void;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (open: boolean) => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
@@ -47,6 +62,24 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [selectedZoneId, setSelectedZoneId] = useState<string>('zone-1');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  
+  // Auth state management
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem('biomendoza_logged_in') === 'true';
+  });
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    const saved = localStorage.getItem('biomendoza_user');
+    return saved
+      ? JSON.parse(saved)
+      : {
+          name: 'Sofía Rodríguez',
+          email: 'sofia.rodriguez@biomendoza.com',
+          phone: '+54 261 555 3912',
+          address: 'Av. Arístides Villanueva 420, Mendoza Capital',
+          deliveryZone: 'Mendoza Capital & Guaymallén'
+        };
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('biomendoza_orders');
@@ -78,6 +111,35 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('biomendoza_orders', JSON.stringify(orders));
   }, [orders]);
 
+  useEffect(() => {
+    localStorage.setItem('biomendoza_logged_in', String(isLoggedIn));
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('biomendoza_user', JSON.stringify(user));
+    }
+  }, [user]);
+
+  const login = (email: string, name: string) => {
+    const newUser: UserProfile = {
+      name: name || 'Sofía Rodríguez',
+      email: email || 'sofia.rodriguez@biomendoza.com',
+      phone: '+54 261 555 3912',
+      address: 'Chacras de Coria, Luján de Cuyo',
+      deliveryZone: 'Luján de Cuyo y Chacras de Coria'
+    };
+    setUser(newUser);
+    setIsLoggedIn(true);
+    setIsAuthModalOpen(false);
+    showSuccess(`¡Bienvenido de nuevo, ${newUser.name}!`);
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    showSuccess('Sesión cerrada correctamente');
+  };
+
   const addToCart = (product: Product, quantity = 1) => {
     setCart((prev) => {
       const existingIndex = prev.findIndex((item) => item.product.id === product.id);
@@ -88,7 +150,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return [...prev, { product, quantity }];
     });
-    showSuccess(`Added ${product.name} to cart`);
+    showSuccess(`Añadido ${product.name} al carrito`);
   };
 
   const removeFromCart = (productId: string) => {
@@ -113,10 +175,10 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setFavorites((prev) => {
       const exists = prev.includes(productId);
       if (exists) {
-        showSuccess('Removed from wishlist');
+        showSuccess('Eliminado de tus favoritos');
         return prev.filter((id) => id !== productId);
       } else {
-        showSuccess('Added to wishlist');
+        showSuccess('Guardado en tus favoritos');
         return [...prev, productId];
       }
     });
@@ -135,7 +197,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     address: string
   ): Order => {
     if (cart.length === 0) {
-      showError('Cart is empty!');
+      showError('El carrito está vacío');
       throw new Error('Cart empty');
     }
 
@@ -145,7 +207,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       items: [...cart],
       totalPrice: cartTotal,
       status: 'Preparing',
-      deliveryAddress: address || 'Chacras de Coria, Luján de Cuyo',
+      deliveryAddress: address || user?.address || 'Chacras de Coria, Luján de Cuyo',
       deliveryZone: activeZone.name,
       deliveryDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
       paymentMethod,
@@ -154,7 +216,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setOrders((prev) => [newOrder, ...prev]);
     clearCart();
-    showSuccess('Order successfully placed! Tracking code generated.');
+    showSuccess('¡Pedido realizado con éxito!');
     return newOrder;
   };
 
@@ -184,7 +246,13 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         searchQuery,
         setSearchQuery,
         selectedCategory,
-        setSelectedCategory
+        setSelectedCategory,
+        isLoggedIn,
+        user,
+        login,
+        logout,
+        isAuthModalOpen,
+        setIsAuthModalOpen
       }}
     >
       {children}
