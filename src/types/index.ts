@@ -1,12 +1,24 @@
+export interface ProducerContact {
+  phone: string;
+  email: string;
+  address: string;
+  googleMapsUrl: string;
+  website?: string;
+  instagram?: string;
+}
+
 export interface Producer {
   id: string;
   name: string;
+  category: 'Winery' | 'Biodynamic Farm';
+  status?: 'Open' | 'Temporarily Closed';
   tagline: string;
   region: 'Uco Valley' | 'Luján de Cuyo' | 'Maipú' | 'San Rafael' | 'Valle de Uco';
   location: string;
   coordinates: { lat: number; lng: number };
   yearsFarming: number;
   certification: string; // e.g. "Demeter Certified Biodynamic"
+  description: string;
   story: string;
   philosophy: string;
   heroImage: string;
@@ -15,6 +27,7 @@ export interface Producer {
   practices: string[];
   sizeHectares: number;
   familyHistory: string;
+  contact: ProducerContact;
 }
 
 export interface Product {
@@ -22,7 +35,7 @@ export interface Product {
   name: string;
   subtitle: string;
   category: 'Fresh Vegetables' | 'Fruits' | 'Eggs' | 'Honey' | 'Olive Oil' | 'Wine' | 'Herbs' | 'Grains' | 'Flours' | 'Seeds' | 'Natural Preserves' | 'Tea';
-  price: number; // in ARS or USD display
+  price: number; // in ARS display
   unit: string;
   producerId: string;
   producerName: string;
@@ -31,7 +44,7 @@ export interface Product {
   images: string[];
   story: string;
   biodynamicNotes: string;
-  preparationUsed?: string; // e.g. "Prep 500 Horn Manure"
+  preparationUsed?: string;
   ingredients?: string[];
   nutritionFacts?: { label: string; value: string }[];
   suggestedPairings?: string[];

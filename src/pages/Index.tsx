@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Leaf, ShieldCheck, BookOpen, Sun, MapPin, CheckCircle2, Wine, Sprout } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCERS } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
@@ -22,7 +22,6 @@ const Index: React.FC = () => {
       
       {/* 1. Fullscreen Hero */}
       <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#14261A]">
-        {/* Cinematic background image with gradient overlay */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000"
@@ -33,7 +32,6 @@ const Index: React.FC = () => {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6 pt-16">
-          
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +85,6 @@ const Index: React.FC = () => {
             </Link>
           </motion.div>
 
-          {/* Quick stats bar */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -206,10 +203,9 @@ const Index: React.FC = () => {
         <LunarCalendarWidget />
       </section>
 
-      {/* 7. Educational Section (Preparations Guide) */}
+      {/* 7. Educational Section */}
       <section className="bg-[#FAF7F0] border-y border-[#E5DFCE] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs uppercase font-bold tracking-widest text-[#284933] bg-[#E2EAD8] px-3 py-1 rounded-full">
               Enfoque Educativo
@@ -223,20 +219,23 @@ const Index: React.FC = () => {
           </div>
 
           <PreparationsGuide />
-
         </div>
       </section>
 
-      {/* 8. Meet the Producers Preview */}
+      {/* 8. MEET OUR PRODUCERS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Artesanos de Mendoza</span>
-          <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#1A3323]">
-            Nuestros Productores Certificados
-          </h2>
-          <p className="text-xs text-[#625846]">
-            Cada botella, frasco y caja de cosecha es trazable hasta estas familias en el Valle de Uco, Agrelo y Luján.
-          </p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 border-b border-[#E3DEC8] pb-4">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#8A775E]">Artesanos de Mendoza</span>
+            <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#1A3323]">
+              Meet Our Producers
+            </h2>
+          </div>
+          <Link to="/producers">
+            <Button variant="ghost" className="text-[#1A3323] hover:text-[#C85A32] font-semibold text-xs flex items-center gap-1">
+              Ver Todos los Productores ({PRODUCERS.length}) <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -256,6 +255,10 @@ const Index: React.FC = () => {
                     alt={producer.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-3 left-3 bg-[#1A3323]/90 text-white backdrop-blur-md text-[10px] uppercase font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    {producer.category === 'Winery' ? <Wine className="w-3 h-3 text-[#D4AF37]" /> : <Sprout className="w-3 h-3 text-[#D4AF37]" />}
+                    {producer.category}
+                  </div>
                   <div className="absolute bottom-3 left-3 bg-[#1A3323] text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
                     <MapPin className="w-3 h-3 text-[#D4AF37]" /> {producer.region}
                   </div>
@@ -266,15 +269,12 @@ const Index: React.FC = () => {
                     {producer.name}
                   </h3>
                   <p className="text-xs text-[#524B3B] leading-relaxed line-clamp-2">
-                    {producer.story}
+                    {producer.description}
                   </p>
 
                   <div className="pt-2 text-[11px] text-[#284933] font-semibold space-y-1">
                     <div className="flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" /> {producer.certification}
-                    </div>
-                    <div className="text-[#8A7E68]">
-                      Cultivando biodinámicamente hace {producer.yearsFarming} años ({producer.sizeHectares} Hectáreas)
                     </div>
                   </div>
                 </div>
@@ -282,8 +282,8 @@ const Index: React.FC = () => {
 
               <div className="p-6 pt-0">
                 <Link to={`/producers/${producer.id}`}>
-                  <Button className="w-full bg-[#EFECE3] hover:bg-[#1A3323] text-[#1A3323] hover:text-white rounded-xl text-xs font-semibold h-11 transition-colors">
-                    Ver Perfil e Historia de la Finca
+                  <Button className="w-full bg-[#1A3323] hover:bg-[#284933] text-white rounded-xl text-xs font-semibold h-11 flex items-center justify-center gap-1.5 shadow-md">
+                    View Producer <ArrowRight className="w-3.5 h-3.5 text-[#D4AF37]" />
                   </Button>
                 </Link>
               </div>

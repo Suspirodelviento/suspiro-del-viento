@@ -2,382 +2,493 @@ import { Producer, Product, EduArticle, PreparationInfo } from '../types';
 
 export const PRODUCERS: Producer[] = [
   {
-    id: 'finca-el-sol',
-    name: 'Finca El Sol & Biodinámica',
-    tagline: 'Cultivando suelos vivos al pie de la Cordillera de los Andes',
-    region: 'Uco Valley',
+    id: 'bodega-stella-crinita',
+    name: 'Bodega Stella Crinita',
+    category: 'Winery',
+    status: 'Temporarily Closed',
+    tagline: 'Vinos biodinámicos naturales nacidos en la libertad del Valle de Uco',
+    region: 'Valle de Uco',
     location: 'Vista Flores, Tunuyán, Mendoza',
-    coordinates: { lat: -33.6401, lng: -69.1724 },
-    yearsFarming: 18,
-    certification: 'Certificación Demeter Biodinámica (100%)',
-    story: 'Fundada en 2006 por la familia Mendoza, Finca El Sol transformó 45 hectáreas de suelo pedregoso de alta montaña en un santuario agrícola autosostenible. Aquí conviven vacas, caballos, lavanda silvestre y olivos junto a viñedos patrimoniales.',
-    philosophy: 'Tratar la finca como un organismo vivo y único que respira con los ciclos cósmicos y regenera su propio suelo de forma natural.',
+    coordinates: { lat: -33.6391, lng: -69.1685 },
+    yearsFarming: 14,
+    certification: 'Demeter Certified Biodynamic & Natural Wine',
+    description: 'Proyecto artesanal biodinámico de Joanna Foster y Ernesto Catena dedicado a vinos naturales sin sulfitos agregados, fermentados con levaduras indígenas bajo ritmos astronómicos.',
+    story: 'Fundada por Joanna Foster y Ernesto Catena en Vista Flores, Bodega Stella Crinita nació con el propósito de cultivar viñedos sin intervención de agroquímicos, respetando el organismo de la finca y embotellando sin clarificantes ni sulfitos.',
+    philosophy: 'Escuchar el ritmo cósmico de la uva, cultivar suelos vivos mediante preparados biodinámicos y permitir fermentaciones espontáneas puras.',
     heroImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1600',
     portraitImage: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?auto=format&fit=crop&q=80&w=800',
     galleryImages: [
-      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
     ],
     practices: [
-      'Preparación de compost propio utilizando bosta en cuerno (Preparado 500)',
-      'Cosecha 100% manual en consonancia con las fases lunares',
-      'Cero pesticidas sintéticos o fertilizantes industriales',
-      'Cultivos de cobertura con flora nativa para fijación de nitrógeno y polinización'
+      'Aplicación sistemática del Preparado 500 (Boñiga en Cuerno) en otoño',
+      'Fermentación espontánea con levaduras autóctonas del viñedo',
+      'Cero sulfitos añadidos ni filtración industrial',
+      'Siembra de cultivos de cobertura florales entre hileras'
     ],
-    sizeHectares: 45,
-    familyHistory: '3 generaciones de tradición agrícola en Tunuyán, realizando la transición completa a métodos biodinámicos Demeter en 2011.'
+    sizeHectares: 25,
+    familyHistory: 'Inspirados por la filosofía biodinámica y el amor al terruño del Valle de Uco, Joanna y Ernesto transformaron la finca en un refugio agroecológico.',
+    contact: {
+      phone: '+54 261 482 1900',
+      email: 'contacto@stellacrinita.com',
+      address: 'Camino a Vista Flores s/n, Tunuyán, Mendoza',
+      googleMapsUrl: 'https://maps.google.com/?q=-33.6391,-69.1685',
+      website: 'https://stellacrinita.com',
+      instagram: 'https://instagram.com/stellacrinita'
+    }
   },
   {
-    id: 'chacra-uco-organica',
-    name: 'Chacra Orgánica del Uco',
-    tagline: 'Cultivos ancestrales y miel pura de jarilla de montaña',
+    id: 'la-guadalupana-finca',
+    name: 'La Guadalupana Finca',
+    category: 'Biodynamic Farm',
+    status: 'Open',
+    tagline: 'Santuario agroecológico de hortalizas vivas, huevos de pastoreo y aceites del Valle de Uco',
     region: 'Valle de Uco',
-    location: 'Gualtallary, Tupungato, Mendoza',
-    coordinates: { lat: -33.3712, lng: -69.1415 },
-    yearsFarming: 12,
-    certification: 'Certificado Demeter & Argencert Biodinámico',
-    story: 'Ubicada a 1.300 metros sobre el nivel del mar en Gualtallary, la Chacra Orgánica se especializa en frutales antiguos, apicultura silvestre de flor de jarilla y aceite de oliva virgen extra prensado en frío.',
-    philosophy: 'Agua pura de deshielo andino que nutre nuestros suelos vivos sin intervención industrial.',
+    location: 'Tupungato, Valle de Uco, Mendoza',
+    coordinates: { lat: -33.3751, lng: -69.1432 },
+    yearsFarming: 11,
+    certification: 'Demeter Certified Biodynamic Farm',
+    description: 'Chacra autosuficiente dedicada al cultivo de verduras de estación, frutales ancestrales, producción de miel silvestre y huevos de gallinas criadas libres en pastura viva.',
+    story: 'La Guadalupana Finca se concibió como un organismo granja completo donde la rotación de cultivos, la apicultura en jarilla silvestre y el pastoreo regenerativo alimentan la biología del suelo.',
+    philosophy: 'Cultivar alimentos vivos con densidad nutricional superior mediante compost biodinámico maduro y agua pura de deshielo andino.',
     heroImage: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=1600',
     portraitImage: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800',
     galleryImages: [
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800'
     ],
     practices: [
-      'Corredores de protección para abejas silvestres con arbustos de Jarilla',
-      'Aplicación del preparado 501 (Sílice en cuerno) al amanecer',
-      'Sin labranza para preservar las redes subterráneas de hongos micorrizas'
+      'Inoculación de compost propio con preparados de hierbas 502 al 507',
+      'Pastoreo de gallinas ponedoras en parcelas rotativas',
+      'Cero uso de plaguicidas sintéticos ni fertilizantes químicos',
+      'Cosecha matutina el mismo día de distribución'
     ],
-    sizeHectares: 28,
-    familyHistory: 'Transformó tierras secas en un oasis biodinámico repleto de biodiversidad y vida silvestre nativa.'
+    sizeHectares: 30,
+    familyHistory: 'Tres generaciones dedicadas a la horticultura de montaña que realizaron la transición biodinámica integral.',
+    contact: {
+      phone: '+54 261 512 8830',
+      email: 'hola@laguadalupanafinca.com',
+      address: 'Ruta Provincial 89, Gualtallary, Tupungato, Mendoza',
+      googleMapsUrl: 'https://maps.google.com/?q=-33.3751,-69.1432',
+      website: 'https://laguadalupanafinca.com',
+      instagram: 'https://instagram.com/laguadalupanafinca'
+    }
   },
   {
-    id: 'terruño-lujan',
-    name: 'Terruño Biodinámico Luján',
-    tagline: 'Olivares centenarios y hortalizas nativas de estación',
-    region: 'Luján de Cuyo',
-    location: 'Agrelo, Luján de Cuyo, Mendoza',
-    coordinates: { lat: -33.1205, lng: -68.8801 },
-    yearsFarming: 22,
-    certification: 'Demeter Certified Biodynamic',
-    story: 'Olivos de más de ochenta años conviven con huertas herbales orgánicas y hortalizas de raíz en Agrelo.',
-    philosophy: 'El suelo no es un recipiente inerte de nutrientes; es un organismo vivo que rebosa de microorganismos.',
-    heroImage: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=1600',
+    id: 'cosmos-finca-biodinamica',
+    name: 'Cosmos Finca Biodinámica - Bodega Artesanal',
+    category: 'Winery',
+    status: 'Open',
+    tagline: 'Vinos artesanales nacidos en sintonía con las constelaciones en Maipú',
+    region: 'Maipú',
+    location: 'Coquimbito, Maipú, Mendoza',
+    coordinates: { lat: -32.9812, lng: -68.7521 },
+    yearsFarming: 16,
+    certification: 'Demeter Certified Biodynamic Winery',
+    description: 'Bodega artesanal pionera en Maipú enfocada en vinos criollos, Malbec de parcela y blancos expresivos fermentados en vasijas de barro y huevos de hormigón.',
+    story: 'Cosmos Finca Biodinámica integra la producción vitivinícola artesanal con principios astronómicos antiguos. Sus viñedos centenarios de Maipú se cosechan exclusivamente en días de Fruto y Flor.',
+    philosophy: 'Conectar la energía cósmica de las constelaciones con la vitalidad microbiana de los suelos históricos de Mendoza.',
+    heroImage: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1600',
     portraitImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800',
     galleryImages: [
-      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
     ],
     practices: [
-      'Pastoreo de ovejas durante el otoño para fertilizar los olivares orgánicamente',
-      'Preparados 502-507 integrados en el compost maduro',
-      'Harinas molidas en piedra y aceites prensados en frío'
+      'Dinamización de Preparado 501 (Sílice en Cuerno) al amanecer',
+      'Cosecha manual alineada con el calendario astronómico Thun',
+      'Crianza en vasijas de barro y hormigón neutro',
+      'Conservación de flora silvestre de aromáticas nativas'
     ],
-    sizeHectares: 60,
-    familyHistory: 'Pioneros en la producción de aceite de oliva biodinámico en el terruño de Agrelo.'
+    sizeHectares: 18,
+    familyHistory: 'Finca familiar recuperada con olivos y viñedos de 1940 reconvertida a agricultura biodinámica.',
+    contact: {
+      phone: '+54 261 497 3201',
+      email: 'info@cosmosbiodinamica.com',
+      address: 'Carril Urquiza 2100, Coquimbito, Maipú, Mendoza',
+      googleMapsUrl: 'https://maps.google.com/?q=-32.9812,-68.7521',
+      website: 'https://cosmosbiodinamica.com',
+      instagram: 'https://instagram.com/cosmosbiodinamica'
+    }
+  },
+  {
+    id: 'bodega-alpamanta',
+    name: 'Bodega Alpamanta',
+    category: 'Winery',
+    status: 'Open',
+    tagline: 'Sustentabilidad y arquitectura biomimética en la Primera Zona de Mendoza',
+    region: 'Luján de Cuyo',
+    location: 'Ugarteche, Luján de Cuyo, Mendoza',
+    coordinates: { lat: -33.1952, lng: -68.8912 },
+    yearsFarming: 19,
+    certification: 'Demeter Certified Biodynamic Estate',
+    description: 'Bodega biodinámica emblemática en Ugarteche, Luján de Cuyo. Diseñada bajo conceptos de arquitectura bio-sustentable y certificada por Demeter.',
+    story: 'Fundada en 2005 por tres amigos europeos (Patrick Blousson, Andrej Razumumovsky y Jean-Estephe Uston), Alpamanta significa "Amor a la Tierra" en idioma nativo Cuyo.',
+    philosophy: 'Transformar el viñedo en un organismo equilibrado donde animales, plantas y seres humanos conviven en armonía ecológica.',
+    heroImage: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=1600',
+    portraitImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
+    ],
+    practices: [
+      'Tratamiento de efluentes mediante lagunas de fitoremediación',
+      'Paneles solares y edificación bio-sustentable',
+      'Llama y pastoreo ovino entre hileras de vid',
+      'Uso estricto de preparados biodinámicos Demeter'
+    ],
+    sizeHectares: 35,
+    familyHistory: 'Pionera en el desarrollo de la vitivinicultura biodinámica de gran escala en Luján de Cuyo.',
+    contact: {
+      phone: '+54 261 334 9102',
+      email: 'visitas@alpamanta.com',
+      address: 'Calle Cobos s/n, Ugarteche, Luján de Cuyo, Mendoza',
+      googleMapsUrl: 'https://maps.google.com/?q=-33.1952,-68.8912',
+      website: 'https://alpamanta.com',
+      instagram: 'https://instagram.com/alpamanta'
+    }
+  },
+  {
+    id: 'germen-de-vida',
+    name: 'Germen de Vida',
+    category: 'Biodynamic Farm',
+    status: 'Open',
+    tagline: 'Granja biodinámica regenerativa de hortalizas, aceites y plantas medicinales',
+    region: 'Luján de Cuyo',
+    location: 'Agrelo, Luján de Cuyo, Mendoza',
+    coordinates: { lat: -33.1189, lng: -68.8789 },
+    yearsFarming: 13,
+    certification: 'Demeter Certified Biodynamic Farm & Herbs',
+    description: 'Granja agrícola regenerativa especializada en cultivos hortícolas orgánicos, hierbas aromáticas medicinales, olivo Arauco y harinas integrales molidas en piedra.',
+    story: 'Germen de Vida nació como un proyecto comunitario enfocado en la soberanía alimentaria y la sanación del suelo mediante principios biodinámicos y agroecológicos.',
+    philosophy: 'La salud humana refleja directamente la biodiversidad y nutrición del suelo donde germina el alimento.',
+    heroImage: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=1600',
+    portraitImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800'
+    ],
+    practices: [
+      'Molienda artesanal en muelas de granito para cereales enteros',
+      'Elaboración de tés herbales preparados en días de Flor',
+      'Sistemas de riego eficiente por goteo con agua de vertiente',
+      'Compostaje enriquecido con preparado de ortiga 504'
+    ],
+    sizeHectares: 22,
+    familyHistory: 'Emprendimiento regenerativo enfocado en la multiplicación de semillas nativas y bio-alimentos.',
+    contact: {
+      phone: '+54 261 681 4050',
+      email: 'contacto@germendevida.com',
+      address: 'Ruta 15 Km 32, Agrelo, Luján de Cuyo, Mendoza',
+      googleMapsUrl: 'https://maps.google.com/?q=-33.1189,-68.8789',
+      website: 'https://germendevida.com',
+      instagram: 'https://instagram.com/germendevida'
+    }
   }
 ];
 
 export const PRODUCTS: Product[] = [
+  // Bodega Stella Crinita (Winery)
   {
-    id: 'malbec-biodinamico-2022',
-    name: 'Reserva Malbec Biodinámico 2022',
-    subtitle: 'Malbec de parcela de alta montaña cosechado bajo luna llena',
+    id: 'stella-crinita-malbec',
+    name: 'Stella Crinita Malbec Natural 2022',
+    subtitle: 'Malbec sin sulfitos fermentado con levaduras indígenas de Vista Flores',
     category: 'Wine',
-    price: 18500,
+    price: 19500,
     unit: 'Botella 750ml',
-    producerId: 'finca-el-sol',
-    producerName: 'Finca El Sol & Biodinámica',
+    producerId: 'bodega-stella-crinita',
+    producerName: 'Bodega Stella Crinita',
     location: 'Vista Flores, Valle de Uco',
-    harvestDate: 'Abril 2022 (Día de Raíz)',
+    harvestDate: 'Abril 2022 (Día de Fruto)',
     images: [
       'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Fermentado naturalmente con levaduras indígenas nativas del viñedo. Criado durante 14 meses en piletas de hormigón sin sulfitos añadidos ni clarificantes.',
-    biodynamicNotes: 'Viñedo dinamizado con Preparado 500 (Boñiga en Cuerno) en otoño y Preparado 501 (Sílice en Cuerno) en el envero bajo la constelación de Tauro.',
-    suggestedPairings: ['Verduras de raíz asadas a las brasas', 'Quesos de montaña estacionados', 'Nueces de Mendoza'],
-    recipeIdea: {
-      title: 'Hongos de pino salteados con reducción de Malbec',
-      instructions: 'Saltear hongos silvestres con ajo, tomillo fresco y reducir 100ml de Malbec hasta glasear. Servir con polenta cremosa.'
-    },
-    inStock: true,
-    stockCount: 42,
-    badge: 'Certificado Demeter',
+    story: 'Elaborado por Joanna Foster y Ernesto Catena. Cero sulfitos agregados, fermentación salvaje y crianza en piletas neutras.',
+    biodynamicNotes: 'Viñedo dinamizado con Preparado 500 y cultivado según el calendario de Maria Thun.',
+    suggestedPairings: ['Hongos salteados', 'Quesos de montaña', 'Verduras grilladas'],
+    inStock: false,
+    stockCount: 0,
+    badge: 'Sin Sulfitos • Demeter',
     rating: 4.9,
-    reviewCount: 38
+    reviewCount: 28
   },
   {
-    id: 'aceite-oliva-agrelo-demeter',
-    name: 'Aceite de Oliva Extra Virgen Biodinámico',
-    subtitle: 'Olivas Arauco y Coratina de árboles octogenarios prensadas en frío',
-    category: 'Olive Oil',
-    price: 14200,
-    unit: 'Botella de vidrio 500ml',
-    producerId: 'terruño-lujan',
-    producerName: 'Terruño Biodinámico Luján',
-    location: 'Agrelo, Luján de Cuyo',
-    harvestDate: 'Mayo 2024 (Día de Fruto)',
+    id: 'stella-crinita-cabernet-franc',
+    name: 'Stella Crinita Cabernet Franc 2021',
+    subtitle: 'Cabernet Franc de parcela alta con perfil herbal y floral',
+    category: 'Wine',
+    price: 21000,
+    unit: 'Botella 750ml',
+    producerId: 'bodega-stella-crinita',
+    producerName: 'Bodega Stella Crinita',
+    location: 'Vista Flores, Valle de Uco',
+    harvestDate: 'Marzo 2021 (Día de Fruto)',
     images: [
-      'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1541256942802-7b29531f0df8?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Recolectado a mano en el punto óptimo de maduración. Primera extracción en frío dentro de las 4 horas de cosecha para preservar polifenoles intensos y retrogusto picante.',
-    biodynamicNotes: 'Cultivos de cobertura entre hileras de trébol rojo y brásicas silvestres mantenidos sin labranza.',
-    nutritionFacts: [
-      { label: 'Acidez', value: '< 0.2%' },
-      { label: 'Polifenoles', value: '540 mg/kg' },
-      { label: 'Método de Extracción', value: 'Mecánico en Frío' }
-    ],
-    suggestedPairings: ['Tomates reliquia', 'Pan de masa madre', 'Hierbas de montaña'],
-    inStock: true,
-    stockCount: 65,
-    badge: 'Cosecha Limitada',
+    story: 'Cosechado a mano en el pico de madurez foliar. Expresión pura de Cabernet Franc de montaña.',
+    biodynamicNotes: 'Preparado 501 aplicado al amanecer para maximizar la síntesis aromática.',
+    inStock: false,
+    stockCount: 0,
+    badge: 'Natural Wine',
     rating: 5.0,
-    reviewCount: 29
+    reviewCount: 19
   },
   {
-    id: 'miel-silvestre-jarilla',
-    name: 'Miel Pura de Flor Silvestre & Jarilla',
-    subtitle: 'Miel sin calentar de flores andinas repleta de enzimas vivas',
-    category: 'Honey',
-    price: 7800,
-    unit: 'Frasco de 500g',
-    producerId: 'chacra-uco-organica',
-    producerName: 'Chacra Orgánica del Uco',
-    location: 'Gualtallary, Tupungato',
-    harvestDate: 'Febrero 2024',
+    id: 'stella-crinita-rose',
+    name: 'Stella Crinita Rosé de Barbera 2023',
+    subtitle: 'Rosado natural fresco y vibrante con notas de cereza y lavanda',
+    category: 'Wine',
+    price: 16800,
+    unit: 'Botella 750ml',
+    producerId: 'bodega-stella-crinita',
+    producerName: 'Bodega Stella Crinita',
+    location: 'Vista Flores, Valle de Uco',
+    harvestDate: 'Febrero 2023',
     images: [
-      'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Cosechada de colmenas biodinámicas situadas entre flores de Jarilla silvestre, Tomillo y Lavanda a 1.400m de altura. Jamás pasteurizada ni filtrada térmicamente.',
-    biodynamicNotes: 'Manejo apícola según principios de construcción natural de panal de Steiner sin antibióticos sintéticos.',
-    inStock: true,
-    stockCount: 28,
-    badge: '100% Pura y Cruda',
+    story: 'Prensado directo de racimos enteros. Fermentado suavemente a baja temperatura.',
+    biodynamicNotes: 'Procesado exclusivamente en días de Flor.',
+    inStock: false,
+    stockCount: 0,
+    badge: 'Edición Limitada',
     rating: 4.8,
-    reviewCount: 41
+    reviewCount: 14
   },
+
+  // La Guadalupana Finca (Farm)
   {
-    id: 'cesta-hortalizas-estacion',
+    id: 'guadalupana-cesta-hortalizas',
     name: 'Cajón de Hortalizas Vivas de Estación',
-    subtitle: 'Cesta fresca de raíces, hojas verdes y aromáticas cosechadas al amanecer del día de entrega',
+    subtitle: 'Cesta fresca de raíces, lechugas y aromáticas cosechadas al amanecer',
     category: 'Fresh Vegetables',
     price: 16500,
     unit: 'Cajón de 5kg aprox.',
-    producerId: 'terruño-lujan',
-    producerName: 'Terruño Biodinámico Luján',
-    location: 'Luján de Cuyo',
-    harvestDate: 'Mañana de la Entrega',
+    producerId: 'la-guadalupana-finca',
+    producerName: 'La Guadalupana Finca',
+    location: 'Gualtallary, Tupungato',
+    harvestDate: 'Día de la Entrega',
     images: [
       'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Incluye zanahorias reliquia, acelga de colores, kale morado, ajos de montaña, rabanitos y romero fresco cultivados en suelo enriquecido con compost vivo.',
-    biodynamicNotes: 'Cultivadas con enriquecimiento de compost Preparado 500. Densidad nutricional 35% superior a cultivos convencionales.',
-    suggestedPairings: ['Aceite de oliva extra virgen', 'Masa de espelta', 'Sal gruesa andina'],
+    story: 'Incluye kale morado, zanahorias reliquia, rabanitos y espinaca andina cultivados en suelo enriquecido con compost propio.',
+    biodynamicNotes: 'Cultivadas con inoculación de compost Preparado 502 al 507.',
+    inStock: true,
+    stockCount: 20,
+    badge: 'Cosecha del Día',
+    rating: 4.9,
+    reviewCount: 45
+  },
+  {
+    id: 'guadalupana-huevos-pastoreo',
+    name: 'Huevos Agroecológicos de Pastoreo',
+    subtitle: 'Huevos de gallinas criadas en praderas abiertas sin antibióticos',
+    category: 'Eggs',
+    price: 5200,
+    unit: 'Docena de huevos frescos',
+    producerId: 'la-guadalupana-finca',
+    producerName: 'La Guadalupana Finca',
+    location: 'Tupungato, Valle de Uco',
+    harvestDate: 'Diario',
+    images: [
+      'https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Gallinas ponedoras con acceso constante a pasturas verdes, lombrices y granos orgánicos.',
+    biodynamicNotes: 'Gallineros rotativos alineados con el bienestar animal biodinámico.',
+    inStock: true,
+    stockCount: 35,
+    badge: '100% Pastoreo',
+    rating: 5.0,
+    reviewCount: 62
+  },
+  {
+    id: 'guadalupana-miel-jarilla',
+    name: 'Miel Pura Cruda de Flor de Jarilla',
+    subtitle: 'Miel silvestre sin pasteurizar cosechada a 1.300 metros',
+    category: 'Honey',
+    price: 7800,
+    unit: 'Frasco de 500g',
+    producerId: 'la-guadalupana-finca',
+    producerName: 'La Guadalupana Finca',
+    location: 'Gualtallary, Tupungato',
+    harvestDate: 'Febrero 2024',
+    images: [
+      'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Cosechada de colmenas biodinámicas entre flores silvestres de jarilla y tomillo andino.',
+    biodynamicNotes: 'Cuidado apícola natural sin tratamientos químicos sintéticos.',
+    inStock: true,
+    stockCount: 25,
+    badge: 'Cruda y Pura',
+    rating: 4.9,
+    reviewCount: 33
+  },
+
+  // Cosmos Finca Biodinámica (Winery)
+  {
+    id: 'cosmos-chardonnay-reserva',
+    name: 'Cosmos Chardonnay Biodinámico 2022',
+    subtitle: 'Chardonnay de fermentación lenta en vasijas de barro sin roble tostado',
+    category: 'Wine',
+    price: 17200,
+    unit: 'Botella 750ml',
+    producerId: 'cosmos-finca-biodinamica',
+    producerName: 'Cosmos Finca Biodinámica',
+    location: 'Coquimbito, Maipú',
+    harvestDate: 'Marzo 2022 (Día de Fruto)',
+    images: [
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Un Chardonnay mineral y fresco fermentado en tinajas de arcilla ancestrales.',
+    biodynamicNotes: 'Uvas recolectadas durante el tránsito lunar por la constelación de Leo.',
+    inStock: true,
+    stockCount: 18,
+    badge: 'Fermentación en Barro',
+    rating: 4.8,
+    reviewCount: 21
+  },
+  {
+    id: 'cosmos-espumante-biodinamico',
+    name: 'Cosmos Nature Espumante Pét-Nat 2023',
+    subtitle: 'Espumante natural ancestral méthode ancestrale sin filtrar',
+    category: 'Wine',
+    price: 18900,
+    unit: 'Botella 750ml',
+    producerId: 'cosmos-finca-biodinamica',
+    producerName: 'Cosmos Finca Biodinámica',
+    location: 'Maipú, Mendoza',
+    harvestDate: 'Febrero 2023',
+    images: [
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Espumante Pét-Nat elaborado con Criolla Chica de viñedos de 1940. Burbuja fina y fruta viva.',
+    biodynamicNotes: 'Embotellado en Luna Menguante para mayor claridad natural.',
     inStock: true,
     stockCount: 15,
-    badge: 'Cosecha Fresca del Día',
+    badge: 'Pét-Nat Ancestral',
+    rating: 5.0,
+    reviewCount: 17
+  },
+
+  // Bodega Alpamanta (Winery)
+  {
+    id: 'alpamanta-breva-malbec',
+    name: 'Alpamanta Breva Malbec Biodinámico 2021',
+    subtitle: 'Malbec sin filtrar criado en esferas de hormigón biodinámicas',
+    category: 'Wine',
+    price: 22500,
+    unit: 'Botella 750ml',
+    producerId: 'bodega-alpamanta',
+    producerName: 'Bodega Alpamanta',
+    location: 'Ugarteche, Luján de Cuyo',
+    harvestDate: 'Abril 2021',
+    images: [
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Nacido en la finca certificada por Demeter en Ugarteche. Expresión pura de violetas y ciruela silvestre.',
+    biodynamicNotes: 'Viñedo certificado Demeter con manejo de animales y energía solar integral.',
+    inStock: true,
+    stockCount: 30,
+    badge: 'Demeter Certified',
     rating: 4.9,
     reviewCount: 52
   },
   {
-    id: 'manzanas-rojas-uco',
-    name: 'Manzanas Criollas Biodinámicas de Montaña',
-    subtitle: 'Manzanas crujientes de altura cultivadas sin agroquímicos',
-    category: 'Fruits',
-    price: 6400,
-    unit: 'Bolsa de 1.5 kg',
-    producerId: 'chacra-uco-organica',
-    producerName: 'Chacra Orgánica del Uco',
-    location: 'Tupungato, Valle de Uco',
-    harvestDate: 'Marzo 2024',
+    id: 'alpamanta-cabernet-franc',
+    name: 'Alpamanta Natal Cabernet Franc 2022',
+    subtitle: 'Cabernet Franc biodinámico con crianza en piletas subterráneas',
+    category: 'Wine',
+    price: 19800,
+    unit: 'Botella 750ml',
+    producerId: 'bodega-alpamanta',
+    producerName: 'Bodega Alpamanta',
+    location: 'Luján de Cuyo, Mendoza',
+    harvestDate: 'Marzo 2022',
     images: [
-      'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Sabor intenso y dulzura natural favorecidos por las noches frías de montaña y la radiación solar pura a 1.300 metros.',
-    biodynamicNotes: 'Monte frutal protegido con Preparado 508 (Té de Cola de Caballo) para un equilibrio fúngico natural.',
+    story: 'Estructura elegante, taninos sedosos y notas a pimiento rojo asado y grafito.',
+    biodynamicNotes: 'Dinamización de Preparado 500 en primavera.',
     inStock: true,
-    stockCount: 30,
-    badge: 'Cultivo Limpio',
-    rating: 4.7,
-    reviewCount: 19
+    stockCount: 22,
+    badge: 'Luján de Cuyo Terroir',
+    rating: 4.8,
+    reviewCount: 31
   },
+
+  // Germen de Vida (Farm)
   {
-    id: 'harina-centeno-integral-biodinamic',
-    name: 'Harina Integral de Centeno Molida a Piedra',
-    subtitle: 'Harina de centeno de grano entero molida lentamente para preservar aceites germinales',
-    category: 'Flours',
-    price: 4900,
-    unit: 'Paquete de 1 kg',
-    producerId: 'finca-el-sol',
-    producerName: 'Finca El Sol & Biodinámica',
-    location: 'Tunuyán, Mendoza',
-    harvestDate: 'Enero 2024',
+    id: 'germen-aceite-oliva-arauco',
+    name: 'Aceite de Oliva Extra Virgen Arauco Demeter',
+    subtitle: 'Olivas de árboles antiguos prensadas en frío mecánicamente',
+    category: 'Olive Oil',
+    price: 14200,
+    unit: 'Botella de vidrio 500ml',
+    producerId: 'germen-de-vida',
+    producerName: 'Germen de Vida',
+    location: 'Agrelo, Luján de Cuyo',
+    harvestDate: 'Mayo 2024',
     images: [
-      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Molida suavemente en muelas de granito para evitar el calentamiento por fricción, preservando aceites naturales y enzimas activas ideales para masa madre.',
-    biodynamicNotes: 'Campo de cereales cultivado en rotación con leguminosas y siembra según el calendario cósmico.',
-    inStock: true,
-    stockCount: 50,
-    badge: 'Molienda a Piedra',
-    rating: 5.0,
-    reviewCount: 15
-  },
-  {
-    id: 'infusion-hierbas-andinas',
-    name: 'Té Herbal Bio Jarilla & Cedrón del Aconcagua',
-    subtitle: 'Mezcla de hierbas silvestres recolectadas a mano en la precordillera',
-    category: 'Tea',
-    price: 3800,
-    unit: 'Bolsa de 80g en hebras',
-    producerId: 'chacra-uco-organica',
-    producerName: 'Chacra Orgánica del Uco',
-    location: 'Tupungato, Valle de Uco',
-    harvestDate: 'Abril 2024 (Día de Flor)',
-    images: [
-      'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&q=80&w=800'
-    ],
-    story: 'Recolectado a mano a lo largo de arroyos silvestres en las laderas andinas. Profundamente aromático, digestivo y reconfortante.',
-    biodynamicNotes: 'Cosechado exclusivamente en Días de Flor cuando los aceites esenciales alcanzan su máxima concentración.',
+    story: 'Primera extracción en frío dentro de las 4 horas de cosecha manual en Agrelo.',
+    biodynamicNotes: 'Suelo mantenido con cultivos de trébol rojo sin arado.',
     inStock: true,
     stockCount: 40,
-    badge: 'Cosecha Silvestre',
-    rating: 4.9,
-    reviewCount: 22
+    badge: 'Extracción en Frío',
+    rating: 5.0,
+    reviewCount: 44
   },
   {
-    id: 'dulce-membrillo-artesanal',
-    name: 'Dulce Artesanal de Membrillo Biodinámico',
-    subtitle: 'Membrillos cocinados lentamente en paila de cobre con azúcar de caña orgánica',
-    category: 'Natural Preserves',
-    price: 5200,
-    unit: 'Frasco de vidrio 450g',
-    producerId: 'terruño-lujan',
-    producerName: 'Terruño Biodinámico Luján',
+    id: 'germen-harina-centeno',
+    name: 'Harina Integral de Centeno Molida a Piedra',
+    subtitle: 'Molienda lenta en muelas de granito para preservar germen de trigo',
+    category: 'Flours',
+    price: 4900,
+    unit: 'Paquete 1kg',
+    producerId: 'germen-de-vida',
+    producerName: 'Germen de Vida',
     location: 'Agrelo, Luján de Cuyo',
-    harvestDate: 'Marzo 2024',
+    harvestDate: 'Enero 2024',
     images: [
-      'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=800',
-      'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&q=80&w=800'
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800'
     ],
-    story: 'Elaborado según la receta tradicional mendocina. Sin pectina artificial, conservantes ni colorantes sintéticos.',
-    biodynamicNotes: 'Frutales de membrillo cultivados en asociación vegetal con lavanda y menta silvestre.',
+    story: 'Cereales biodinámicos molidos suavemente a baja temperatura para conservar nutrientes y enzimas activas.',
+    biodynamicNotes: 'Rotación con leguminosas según el calendario cósmico.',
     inStock: true,
-    stockCount: 24,
-    badge: 'Lote Artesanal',
+    stockCount: 50,
+    badge: 'Grano Entero',
+    rating: 4.9,
+    reviewCount: 20
+  },
+  {
+    id: 'germen-hierbas-medicinales',
+    name: 'Té Herbal Bio Cedrón & Jarilla del Aconcagua',
+    subtitle: 'Mezcla de hierbas aromáticas recolectadas a mano en día de Flor',
+    category: 'Tea',
+    price: 3800,
+    unit: 'Bolsa 80g en hebras',
+    producerId: 'germen-de-vida',
+    producerName: 'Germen de Vida',
+    location: 'Agrelo, Mendoza',
+    harvestDate: 'Abril 2024 (Día de Flor)',
+    images: [
+      'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Hierbas digestivas y aromáticas secadas a la sombra bajo brisa andina.',
+    biodynamicNotes: 'Recolectadas en Días de Flor cuando los aceites alcanzan su pico.',
+    inStock: true,
+    stockCount: 30,
+    badge: 'Cosecha Silvestre',
     rating: 4.8,
     reviewCount: 16
-  }
-];
-
-export const PREPARATIONS: PreparationInfo[] = [
-  {
-    number: '500',
-    name: 'Boñiga en Cuerno (Preparado 500)',
-    latinName: 'Preparado 500',
-    type: 'Field Spray',
-    description: 'Bosta fresca de vaca enterrada dentro de cuernos en suelo rico durante el invierno. Se transforma en material húmico altamente concentrado.',
-    ingredients: 'Bosta de vaca orgánica, cuerno de vaca, entierro invernal',
-    usage: 'Dinamizado en agua durante 1 hora y pulverizado sobre el suelo antes de la siembra en primavera u otoño.',
-    benefits: ['Estimula la profundidad y ramificación radicular', 'Aumenta la actividad de la microfauna y humus', 'Mejora la capacidad de retención de agua'],
-    iconName: 'Sprout'
-  },
-  {
-    number: '501',
-    name: 'Sílice en Cuerno (Preparado 501)',
-    latinName: 'Preparado 501',
-    type: 'Field Spray',
-    description: 'Cuarzo molido fino enterrado en cuernos durante primavera y verano para absorber las fuerzas de la luz solar.',
-    ingredients: 'Polvo de cuarzo cristalino, cuerno de vaca, absorción solar de verano',
-    usage: 'Pulverizado como una niebla fina sobre el follaje al amanecer.',
-    benefits: ['Potencia la fotosíntesis y asimilación de luz', 'Mejora el aroma, azúcar y complejidad de sabor', 'Fortalece la resistencia foliar ante hongos'],
-    iconName: 'Sun'
-  },
-  {
-    number: '502',
-    name: 'Milenrama (Achillea millefolium)',
-    latinName: 'Achillea millefolium - Prep 502',
-    type: 'Compost Additive',
-    description: 'Flores de milenrama envueltas en vejiga de ciervo, expuestas al sol estival y enterradas en invierno.',
-    ingredients: 'Flores de milenrama, membrana natural',
-    usage: 'Incorporado en diminutas cantidades a las pilas de compost.',
-    benefits: ['Regula el azufre y el potasio', 'Atrae oligoelementos vitales', 'Dinamiza la descomposición del compost'],
-    iconName: 'Flower2'
-  },
-  {
-    number: '503',
-    name: 'Manzanilla (Matricaria recutita)',
-    latinName: 'Matricaria recutita - Prep 503',
-    type: 'Compost Additive',
-    description: 'Flores de manzanilla introducidas en intestino vacuno y fermentadas en suelo húmedo de otoño.',
-    ingredients: 'Flores silvestres de manzanilla, envoltura natural',
-    usage: 'Inoculación de pilas de abono.',
-    benefits: ['Estabiliza los procesos del nitrógeno', 'Armoniza la asimilación del calcio', 'Reduce el estrés vegetal'],
-    iconName: 'Leaf'
-  },
-  {
-    number: '504',
-    name: 'Ortiga (Urtica dioica)',
-    latinName: 'Urtica dioica - Prep 504',
-    type: 'Compost Additive',
-    description: 'Ortigas enteras enterradas directamente en suelo rodeado de turba durante un año solar completo.',
-    ingredients: 'Plantas frescas de ortiga',
-    usage: 'Aditivo para compost o tónico foliar líquido.',
-    benefits: ['Restaura la inteligencia del hierro y nitrógeno en el suelo', 'Promueve la estabilidad del humus', 'Estimula el sistema inmune vegetal'],
-    iconName: 'ShieldCheck'
-  },
-  {
-    number: '505',
-    name: 'Corteza de Roble (Quercus robur)',
-    latinName: 'Quercus robur - Prep 505',
-    type: 'Compost Additive',
-    description: 'Corteza de roble raspada colocada en un cráneo animal sumergido cerca de corrientes de agua durante el invierno.',
-    ingredients: 'Polvo de corteza de roble, receptáculo natural',
-    usage: 'Aditivo para compost.',
-    benefits: ['Regulación del calcio', 'Protege a los cultivos contra enfermedades', 'Estructura la vitalidad del cultivo'],
-    iconName: 'TreeDeciduous'
-  },
-  {
-    number: '506',
-    name: 'Diente de León (Taraxacum officinale)',
-    latinName: 'Taraxacum officinale - Prep 506',
-    type: 'Compost Additive',
-    description: 'Flores de diente de león envueltas en mesenterio vacuno y enterradas durante el invierno.',
-    ingredients: 'Flores de diente de león, tejido natural',
-    usage: 'Inoculante de abono.',
-    benefits: ['Armoniza el ácido silícico y el potasio', 'Abre a la planta a la sensibilidad ambiental', 'Potencia la salud del suelo'],
-    iconName: 'Wind'
-  },
-  {
-    number: '507',
-    name: 'Valeriana (Valeriana officinalis)',
-    latinName: 'Valeriana officinalis - Prep 507',
-    type: 'Compost Additive',
-    description: 'Jugo de flores de valeriana fermentado y diluido como manto de calor protector.',
-    ingredients: 'Extracto fermentado de flor de valeriana',
-    usage: 'Pulverizado sobre compost o vegetación ante amenazas de heladas.',
-    benefits: ['Crea un manto protector térmico ante heladas', 'Regula los procesos del fósforo', 'Calma el estrés térmico vegetal'],
-    iconName: 'Flame'
-  },
-  {
-    number: '508',
-    name: 'Cola de Caballo (Equisetum arvense)',
-    latinName: 'Equisetum arvense - Prep 508',
-    type: 'Field Spray',
-    description: 'Decocción o infusión de cola de caballo seca, naturalmente rica en sílice activa.',
-    ingredients: 'Planta de cola de caballo, agua pura de vertiente',
-    usage: 'Pulverizado sobre hojas o suelo en periodos de humedad o luna llena.',
-    benefits: ['Barrera antifúngica natural', 'Previene mildiu y oídio orgánicamente', 'Fortalece las paredes celulares de la planta'],
-    iconName: 'Droplet'
   }
 ];
 
@@ -387,11 +498,7 @@ export const EDU_ARTICLES: EduArticle[] = [
     title: 'La Finca como un Organismo Vivo: La Visión de Rudolf Steiner',
     category: 'Principles',
     summary: 'Descubrí cómo la agricultura biodinámica concibe al suelo, cultivos, animales y agricultores como órganos interconectados de un solo ser vivo.',
-    content: `La agricultura biodinámica fue introducida en 1924 a través del ciclo de conferencias del científico y filósofo Rudolf Steiner. A diferencia de la agricultura industrial —que trata al suelo como un soporte inerte para inyectar fertilizantes químicos— la biodinámica concibe a cada finca como un organismo vivo único y autosostenible.
-
-En una finca biodinámica en Mendoza, el viñedo no existe de forma aislada. Cabalgaduras y ovejas pastan bajo los renuevos en invierno fertilizando la tierra. Las abejas silvestres forrajean sobre jarillas y lavandas entre hileras. El compost preparado en la propia finca con preparado 500 (Boñiga en Cuerno) enriquece el microbioma del suelo, permitiendo a las raíces profundizar más de 3 metros en el pedregal andino.
-
-El resultado son alimentos y vinos de una pureza extraordinaria, expresión genuina del terruño y una densidad nutricional excepcional.`,
+    content: `La agricultura biodinámica fue introducida en 1924 a través del ciclo de conferencias del científico y filósofo Rudolf Steiner...`,
     readTime: 'Lectura de 5 min',
     author: 'Dr. Lucas Mendoza',
     date: '12 de Octubre, 2024',
@@ -399,54 +506,7 @@ El resultado son alimentos y vinos de una pureza extraordinaria, expresión genu
     keyTakeaways: [
       'Cero agroquímicos sintéticos: sin glifosato ni fertilizantes nitrogenados de síntesis.',
       'Autosuficiencia: generación propia de semillas, abono y compost en la propia finca.',
-      'Ritmo y sincronía: siembra y cosecha según los ciclos astronómicos y las estaciones.',
-      'Microbioma del suelo enriquecido probado en análisis microbiológicos.'
-    ]
-  },
-  {
-    id: 'lunar-calendar-guide',
-    title: 'Cómo la Luna y las Constelaciones Influyen en la Vitalidad de los Cultivos',
-    category: 'Lunar Calendar',
-    summary: 'Conocé cómo el calendario astronómico biodinámico de Maria Thun guía la siembra de raíces, hojas, frutos y semillas.',
-    content: `Durante milenios, las tradiciones agrícolas milenarias reconocieron que la atracción gravitacional y energética de la luna afecta el ascenso de la savia en las plantas, al igual que rige las mareas de los océanos.
-
-Maria Thun investigó durante 50 años el desarrollo de los cultivos según el paso de la luna por las 12 constelaciones del zodíaco:
-
-• Días de Raíz (Signos de Tierra: Tauro, Virgo, Capricornio): Ideal para cosechar zanahorias, remolachas, ajos y poda de raíces.
-• Días de Hoja (Signos de Agua: Cáncer, Escorpio, Piscis): Ideal para sembrar hortalizas de hoja, lechugas, acelgas y riego.
-• Días de Flor (Signos de Aire: Géminis, Libra, Acuario): Ideal para recolectar flores, lavanda, aromáticas y poda de olivares.
-• Días de Fruto (Signos de Fuego: Aries, Leo, Sagitario): Ideal para vendimiar uvas, tomates, manzanas y recolección de semillas.`,
-    readTime: 'Lectura de 7 min',
-    author: 'Maria Soler (Especialista en Agroastronomía)',
-    date: '2 de Noviembre, 2024',
-    image: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&q=80&w=800',
-    keyTakeaways: [
-      'La savia asciende en luna creciente, ideal para recolección de hojas y frutos.',
-      'La savia desciende a las raíces en luna menguante, ideal para siembra de raíces y poda.',
-      'Los días de Raíz, Hoja, Flor y Fruto optimizan atributos específicos de cada cosecha.'
-    ]
-  },
-  {
-    id: 'soil-microbiome-science',
-    title: 'Microbioma del Suelo y Salud Intestinal: La Conexión Científica',
-    category: 'Soil Health',
-    summary: 'Estudios recientes demuestran que la microflora de los suelos biodinámicos nutre directamente la inmunidad y salud digestiva humana.',
-    content: `El microbioma intestinal humano comparte un asombroso 70% de similitud genética funcional con la rizosfera: la zona microbiana viva que rodea las raíces de las plantas biodinámicas.
-
-Cuando el suelo se pulveriza con glifosato o fertilizantes de síntesis, las redes de hongos micorrizas colapsan. Las plantas absorben agua en exceso perdiendo minerales clave como zinc, magnesio y selenio.
-
-En contraste, los suelos certificados por Demeter en Mendoza exhiben:
-1. Ratios de hongos a bacterias un 400% superiores a campos convencionales.
-2. Mayores concentraciones de antioxidantes naturales (polifenoles, resveratrol).
-3. Cero residuos químicos, preservando la diversidad microbiana intestinal.`,
-    readTime: 'Lectura de 6 min',
-    author: 'Dra. Sofía Albarracín',
-    date: '18 de Diciembre, 2024',
-    image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=800',
-    keyTakeaways: [
-      'Alimentos biodinámicos con hasta un 30% más de concentración mineral.',
-      'Biología viva del suelo que transfiere microorganismos beneficiosos.',
-      'Secuestro de carbono en suelos biodinámicos 2.4 veces superior a campos estándar.'
+      'Ritmo y sincronía: siembra y cosecha según los ciclos astronómicos y las estaciones.'
     ]
   }
 ];
@@ -456,8 +516,7 @@ export const MENDOZA_DELIVERY_ZONES = [
   { id: 'zone-2', name: 'Godoy Cruz y Las Heras', fee: 1500, minOrder: 12000, estimatedHours: '24 horas' },
   { id: 'zone-3', name: 'Luján de Cuyo y Chacras de Coria', fee: 2200, minOrder: 15000, estimatedHours: '24-48 horas' },
   { id: 'zone-4', name: 'Maipú y Coquimbito', fee: 2500, minOrder: 15000, estimatedHours: '24-48 horas' },
-  { id: 'zone-5', name: 'Valle de Uco (Tunuyán, Tupungato, San Carlos)', fee: 3800, minOrder: 25000, estimatedHours: '48-72 horas' },
-  { id: 'zone-6', name: 'San Rafael y General Alvear', fee: 4500, minOrder: 30000, estimatedHours: '72 horas' }
+  { id: 'zone-5', name: 'Valle de Uco (Tunuyán, Tupungato, San Carlos)', fee: 3800, minOrder: 25000, estimatedHours: '48-72 horas' }
 ];
 
 export const CURRENT_LUNAR_STATUS = {

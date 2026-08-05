@@ -3,12 +3,11 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Producer } from '../types';
-import { MapPin, Award, ArrowRight, ShieldCheck } from 'lucide-react';
+import { MapPin, ArrowRight, ShieldCheck, Wine, Sprout } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Custom Map Marker Icon using SVG
-const createCustomIcon = (isSelected: boolean) => {
-  const color = isSelected ? '#C85A32' : '#1A3323';
+const createCustomIcon = (isSelected: boolean, category: 'Winery' | 'Biodynamic Farm') => {
+  const color = isSelected ? '#C85A32' : category === 'Winery' ? '#1A3323' : '#284933';
   const stroke = '#D4AF37';
   
   const svgString = `
@@ -33,7 +32,6 @@ interface ProducerMapProps {
   onSelectProducer?: (producer: Producer) => void;
 }
 
-// Controller component to re-center map when selection changes
 const MapRecenter: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
   const map = useMap();
   React.useEffect(() => {
@@ -47,11 +45,11 @@ export const ProducerMap: React.FC<ProducerMapProps> = ({
   selectedProducerId,
   onSelectProducer,
 }) => {
-  const mendozaCenter: [number, number] = [-33.4, -69.0]; // Central coordinates for Mendoza wine region
-  const [activeRegion, setActiveRegion] = useState<string>('All');
+  const mendozaCenter: [number, number] = [-33.25, -68.95];
+  const [activeCategory, setActiveCategory] = useState<string>('All');
 
   const filteredProducers = producers.filter(
-    (p) => activeRegion === 'All' || p.region === activeRegion
+    (p) => activeCategory === 'All' || p.category === activeCategory
   );
 
   const selectedProducer = producers.find((p) => p.id === selectedProducerId);
@@ -59,45 +57,47 @@ export const ProducerMap: React.FC<ProducerMapProps> = ({
     ? [selectedProducer.coordinates.lat, selectedProducer.coordinates.lng]
     : mendozaCenter;
 
-  const regions = ['All', 'Valle de Uco', 'Luján de Cuyo', 'Maipú', 'San Rafael'];
-
   return (
     <div className="bg-white border border-[#E3DEC3] rounded-3xl overflow-hidden shadow-md flex flex-col space-y-0">
       
-      {/* Map Header / Filters */}
+      {/* Map Header */}
       <div className="p-5 bg-[#1A3323] text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <span className="text-xs uppercase font-bold tracking-widest text-[#D4AF37] flex items-center gap-1.5">
-            <MapPin className="w-4 h-4" /> Mapa de Terruños en Mendoza
+            <MapPin className="w-4 h-4" /> Terruños Biodinámicos Verificados
           </span>
           <h3 className="font-serif font-bold text-xl text-white mt-0.5">
-            Ubicación Geográfica de las Fincas
+            Mapa Interactivo de Productores en Mendoza
           </h3>
         </div>
 
-        {/* Region Pills */}
+        {/* Category Filters */}
         <div className="flex flex-wrap gap-2">
-          {regions.map((reg) => (
+          {[
+            { id: 'All', label: 'Todos' },
+            { id: 'Winery', label: 'Bodegas' },
+            { id: 'Biodynamic Farm', label: 'Granjas & Fincas' }
+          ].map((cat) => (
             <button
-              key={reg}
-              onClick={() => setActiveRegion(reg)}
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
               className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                activeRegion === reg
+                activeCategory === cat.id
                   ? 'bg-[#D4AF37] text-[#1A3323] shadow-sm'
                   : 'bg-[#284933] text-white hover:bg-[#345c41]'
               }`}
             >
-              {reg === 'All' ? 'Todas las Regiones' : reg}
+              {cat.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Leaflet Container */}
+      {/* Leaflet Map */}
       <div className="h-[420px] w-full relative z-0 bg-[#F2EFE8]">
         <MapContainer
           center={mapCenter}
-          zoom={9}
+          zoom={selectedProducer ? 11 : 9}
           scrollWheelZoom={false}
           className="h-full w-full z-0"
         >
@@ -114,7 +114,7 @@ export const ProducerMap: React.FC<ProducerMapProps> = ({
               <Marker
                 key={producer.id}
                 position={[producer.coordinates.lat, producer.coordinates.lng]}
-                icon={createCustomIcon(isSelected)}
+                icon={createCustomIcon(isSelected, producer.category)}
                 eventHandlers={{
                   click: () => onSelectProducer && onSelectProducer(producer),
                 }}
@@ -127,14 +127,21 @@ export const ProducerMap: React.FC<ProducerMapProps> = ({
                       className="w-full h-24 object-cover rounded-xl"
                     />
                     <div>
-                      <span className="text-[10px] font-bold text-[#284933] bg-[#EFF4EC] px-2 py-0.5 rounded uppercase">
-                        {producer.region}
-                      </span>
-                      <h4 className="font-serif font-bold text-sm text-[#1A3323] mt-1 leading-snug">
+                      <div className="flex items-center gap-1 mb-1">
+                        <span className="text-[10px] font-bold text-[#284933] bg-[#EFF4EC] px-2 py-0.5 rounded uppercase">
+                          {producer.category}
+                        </span>
+                        {producer.status === 'Temporarily Closed' && (
+                          <span className="text-[9px] font-bold text-red-700 bg-red-100 px-1.5 py-0.5 rounded">
+                            Cerrado
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-serif font-bold text-sm text-[#1A3323] leading-snug">
                         {producer.name}
                       </h4>
                       <p className="text-[11px] text-[#625846] line-clamp-2 mt-1">
-                        {producer.tagline}
+                        {producer.location}
                       </p>
                     </div>
 
@@ -155,13 +162,12 @@ export const ProducerMap: React.FC<ProducerMapProps> = ({
         </MapContainer>
       </div>
 
-      {/* Footer Info */}
       <div className="p-4 bg-[#FAF7F0] border-t border-[#E3DEC3] text-xs text-[#625846] flex flex-col sm:flex-row items-center justify-between gap-2">
         <span className="flex items-center gap-1.5 font-medium text-[#1A3323]">
-          <ShieldCheck className="w-4 h-4 text-[#284933]" /> {filteredProducers.length} fincas biodinámicas mapeadas en Cuyo
+          <ShieldCheck className="w-4 h-4 text-[#284933]" /> {filteredProducers.length} productores biodinámicos verificados en Mendoza
         </span>
         <span className="text-[11px] text-[#786D58]">
-          Hacé clic en los marcadores dorados para explorar la finca.
+          Hacé clic en los marcadores para explorar cada productor.
         </span>
       </div>
 
