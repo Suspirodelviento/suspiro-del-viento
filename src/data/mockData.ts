@@ -1,5 +1,136 @@
 import { Producer, Product, EduArticle, PreparationInfo } from '../types';
 
+export const PREPARATIONS: PreparationInfo[] = [
+  {
+    number: '500',
+    name: 'Preparado de Boñiga en Cuerno (Horn Manure)',
+    latinName: 'Preparation 500',
+    type: 'Field Spray',
+    description: 'Estiércol vacuno fresco introducido en cuernos de vaca y enterrado durante el invierno. Tras su extracción en primavera, se dinamiza en agua durante 1 hora y se pulveriza en gotas finas al atardecer.',
+    ingredients: 'Estiércol de vaca nodriza de finca propia, cuerno vacuno.',
+    usage: 'Se pulveriza en el suelo al comienzo de la primavera y otoño en días de Tierra o Raíz.',
+    benefits: [
+      'Multiplica la densidad de hongos micorricicos en la rizosfera',
+      'Estimula la profundización del sistema radicular hasta un 300%',
+      'Mejora la estructura coloidal y la humus del suelo'
+    ],
+    iconName: 'Sprout'
+  },
+  {
+    number: '501',
+    name: 'Preparado de Sílice en Cuerno (Horn Silica)',
+    latinName: 'Preparation 501',
+    type: 'Field Spray',
+    description: 'Cuarzo de cristal pulverizado en polvo fino, enterrado en cuernos durante la primavera y el verano para absorber la máxima luz solar. Se aplica como niebla fina al amanecer.',
+    ingredients: 'Cuarzo puro pulverizado (dióxido de silicio), cuerno vacuno.',
+    usage: 'Se rocía sobre el follaje de los cultivos al amanecer en días de Fruto o Flor.',
+    benefits: [
+      'Intensifica la fotosíntesis vegetal y el metabolismo foliar',
+      'Aumenta los grados Brix, azúcares naturales y polifenoles en uvas y frutas',
+      'Refuerza la epidermis foliar contra ataques de hongos patógenos'
+    ],
+    iconName: 'Sun'
+  },
+  {
+    number: '502',
+    name: 'Preparado de Milenrama (Yarrow)',
+    latinName: 'Achillea millefolium',
+    type: 'Compost Additive',
+    description: 'Flores de milenrama introducidas en vejiga de ciervo y expuestas al sol durante el verano antes de enterrarse durante el invierno.',
+    ingredients: 'Flores silvestres de milenrama, vejiga de ciervo.',
+    usage: 'Se inocula en pequeñas dosis dentro de la pila de compost biodinámico.',
+    benefits: [
+      'Regula los ciclos de azufre y potasio en el compost',
+      'Permite la asimilación eficiente de micronutrientes traza'
+    ],
+    iconName: 'Flower2'
+  },
+  {
+    number: '503',
+    name: 'Preparado de Manzanilla (Chamomile)',
+    latinName: 'Matricaria recutita',
+    type: 'Compost Additive',
+    description: 'Flores de manzanilla fermentadas en intestino vacuno durante el invierno en tierra fértil.',
+    ingredients: 'Cabezuelas florales de manzanilla, tripa vacuna.',
+    usage: 'Se introduce en la pila de compostaje para estabilizar el nitrógeno.',
+    benefits: [
+      'Retiene el nitrógeno volátil evitando pérdidas en forma de amoníaco',
+      'Estimula el crecimiento vegetal armónico y saludable'
+    ],
+    iconName: 'Leaf'
+  },
+  {
+    number: '504',
+    name: 'Preparado de Ortiga (Stinging Nettle)',
+    latinName: 'Urtica dioica',
+    type: 'Compost Additive',
+    description: 'Hojas y tallos de ortiga silvestre enterrados directamente en la tierra rodeados de turba durante un año completo.',
+    ingredients: 'Ortiga mayor silvestre recolectada en floración.',
+    usage: 'Se inocula en el compost para equilibrar el hierro y la estructura del suelo.',
+    benefits: [
+      'Aporta sensibilidad y equilibrio al suelo',
+      'Favorece la formación de humus estable y esponjoso'
+    ],
+    iconName: 'ShieldCheck'
+  },
+  {
+    number: '505',
+    name: 'Preparado de Corteza de Roble (Oak Bark)',
+    latinName: 'Quercus robur',
+    type: 'Compost Additive',
+    description: 'Corteza de roble rallada enterrada dentro del cráneo de un animal doméstico en contacto con agua corriente invernal.',
+    ingredients: 'Corteza rica en calcio de roble, cráneo animal.',
+    usage: 'Aditivo esencial en el compostaje biodinámico.',
+    benefits: [
+      'Aporta calcio estructural a las paredes celulares de las plantas',
+      'Protege contra enfermedades fúngicas excesivas'
+    ],
+    iconName: 'TreeDeciduous'
+  },
+  {
+    number: '506',
+    name: 'Preparado de Diente de León (Dandelion)',
+    latinName: 'Taraxacum officinale',
+    type: 'Compost Additive',
+    description: 'Flores amarillas de diente de león envueltas en mesenterio vacuno y fermentadas bajo tierra en invierno.',
+    ingredients: 'Flores de diente de león, mesenterio vacuno.',
+    usage: 'Inoculante del compost para regular el sílice celular.',
+    benefits: [
+      'Conecta la planta con la luz ambiental y el silicio',
+      'Atrae microorganismos beneficiosos al suelo'
+    ],
+    iconName: 'Wind'
+  },
+  {
+    number: '507',
+    name: 'Preparado de Valeriana (Valerian)',
+    latinName: 'Valeriana officinalis',
+    type: 'Compost Additive',
+    description: 'Jugo exprimido de flores de valeriana diluido en agua tibia y rociado como manto térmico sobre la pila de compost.',
+    ingredients: 'Flores frescas de valeriana silvestre.',
+    usage: 'Se asperja sobre la superficie exterior del compost recién armado.',
+    benefits: [
+      'Crea un manto de protección térmica alrededor del compost',
+      'Regula los procesos de fósforo en el abono'
+    ],
+    iconName: 'Flame'
+  },
+  {
+    number: '508',
+    name: 'Preparado de Cola de Caballo (Horsetail)',
+    latinName: 'Equisetum arvense',
+    type: 'Field Spray',
+    description: 'Té decocido de cola de caballo rica en sílice vegetal, hervido durante 20 minutos y pulverizado en primavera y verano.',
+    ingredients: 'Tallos secos o frescos de Equisetum arvense.',
+    usage: 'Se rocía directamente sobre las hojas durante períodos de alta humedad.',
+    benefits: [
+      'Prevención natural contra oídio, mildiu y botritis en viñedos',
+      'Fortalece los tejidos vegetales contra ataques fúngicos'
+    ],
+    iconName: 'Droplet'
+  }
+];
+
 export const PRODUCERS: Producer[] = [
   {
     id: 'bodega-stella-crinita',
