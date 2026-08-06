@@ -146,10 +146,10 @@ export const PRODUCERS: Producer[] = [
     description: 'Proyecto familiar agroecológico y bodega artesanal ubicado en el oasis norte de Lavalle, Mendoza. Finca Biodinámica Cosmos cultiva la tierra de desierto como un organismo vivo autosostenible que produce alimentos puros, vinos artesanales naturales, hortalizas de estación, plantas medicinales, olivas y cosmética natural.',
     story: 'Finca Biodinámica Cosmos es un proyecto familiar arraigado en Lavalle, Mendoza, nacido de la convicción de regenerar el suelo de desierto andino mediante la agricultura biodinámica. A través de la integración de compostaje vivo, animales de granja, cultivos de cobertura y el uso cuidadoso de las preparaciones biodinámicas (500–508), la finca ha transformado su paisaje en un refugio lleno de biodiversidad, plantas aromáticas y viñedos de cultivo limpio.',
     philosophy: 'Concebir la finca como un organismo holístico donde la tierra viva, los ritmos astronómicos, los animales y la comunidad humana se nutren mutuamente para generar alimentos puros e inspirar el aprendizaje consciente.',
-    heroImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1600',
-    portraitImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800',
+    heroImage: '/producers/cosmos/casa.jpg',
+    portraitImage: '/producers/cosmos/casa.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800',
+      '/producers/cosmos/casa.jpg',
       'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
