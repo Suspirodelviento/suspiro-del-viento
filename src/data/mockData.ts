@@ -133,6 +133,79 @@ export const PREPARATIONS: PreparationInfo[] = [
 
 export const PRODUCERS: Producer[] = [
   {
+    id: 'finca-biodinamica-cosmos',
+    name: 'Finca Biodinámica Cosmos',
+    category: 'Biodynamic Farm',
+    status: 'Open',
+    tagline: 'Oasis biodinámico artesanal, finca viva y bodega natural en Lavalle, Mendoza',
+    region: 'Lavalle',
+    location: 'Lavalle, Mendoza, Argentina',
+    coordinates: { lat: -32.7214, lng: -68.5942 },
+    yearsFarming: 15,
+    certification: 'Certified Biodynamic Farm & Demeter Standards',
+    description: 'Proyecto familiar agroecológico y bodega artesanal ubicado en el oasis norte de Lavalle, Mendoza. Finca Biodinámica Cosmos cultiva la tierra de desierto como un organismo vivo autosostenible que produce alimentos puros, vinos artesanales naturales, hortalizas de estación, plantas medicinales, olivas y cosmética natural.',
+    story: 'Finca Biodinámica Cosmos es un proyecto familiar arraigado en Lavalle, Mendoza, nacido de la convicción de regenerar el suelo de desierto andino mediante la agricultura biodinámica. A través de la integración de compostaje vivo, animales de granja, cultivos de cobertura y el uso cuidadoso de las preparaciones biodinámicas (500–508), la finca ha transformado su paisaje en un refugio lleno de biodiversidad, plantas aromáticas y viñedos de cultivo limpio.',
+    philosophy: 'Concebir la finca como un organismo holístico donde la tierra viva, los ritmos astronómicos, los animales y la comunidad humana se nutren mutuamente para generar alimentos puros e inspirar el aprendizaje consciente.',
+    heroImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1600',
+    portraitImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=800'
+    ],
+    practices: [
+      'Dinamización y aplicación ritmada de Preparado 500 (Boñiga) y 501 (Sílice)',
+      'Inoculación de compost vegetal e integración animal para suelo vivo',
+      'Siembra y cosecha guiada por el calendario astronómico lunar',
+      'Conservación de floras nativas de lavanda, jarilla y aromáticas silvestres',
+      'Vinificación artesanal sin aditivos sintéticos ni clarificantes industriales'
+    ],
+    sizeHectares: 20,
+    familyHistory: 'Iniciada como un emprendimiento familiar de regeneración ecológica en Lavalle, Finca Biodinámica Cosmos se ha consolidado como un faro de aprendizaje biodinámico y producción artesanal en Mendoza.',
+    contact: {
+      phone: '+54 261 497 3201',
+      email: 'contacto@fincacosmos.com.ar',
+      address: 'Lavalle, Mendoza, Argentina',
+      googleMapsUrl: 'https://maps.google.com/?q=-32.7214,-68.5942',
+      website: 'https://www.fincacosmos.com.ar',
+      instagram: 'https://www.instagram.com/fincacosmos/?hl=en'
+    },
+    experiences: [
+      {
+        title: 'Visitas Guiadas & Recorrido Biodinámico',
+        description: 'Caminata guiada por la huerta viva, la bodega artesanal y los corrales de animales, comprendiendo los principios de la agricultura de Rudolf Steiner.',
+        tag: 'Experiencia Educativa'
+      },
+      {
+        title: 'Experiencia de Bodega Artesanal & Catas',
+        description: 'Degustación de vinos naturales artesanales producidos en partidas limitadas acompañados de productos de la propia huerta de la finca.',
+        tag: 'Vinos & Sabores'
+      },
+      {
+        title: 'Talleres de Agricultura & Plantas Medicinales',
+        description: 'Jornadas de aprendizaje sobre elaboración de compost biodinámico, uso de plantas aromáticas y cosmética botánica natural.',
+        tag: 'Talleres'
+      },
+      {
+        title: 'Paseos por la Huerta Organismo & Biodiversidad',
+        description: 'Recorrido vivencial apreciando los cultivos de hortalizas reliquia, frótales ancestrales y los corredores biológicos nativos.',
+        tag: 'Naturaleza'
+      }
+    ],
+    produceCategories: [
+      { name: 'Vinos Naturales & Artesanales', description: 'Cosechas de viñedo propio vinificadas sin aditivos sintéticos.', icon: 'Wine' },
+      { name: 'Hortalizas Frescas de Estación', description: 'Verduras vivas cultivadas en huerta biodinámica compostada.', icon: 'Sprout' },
+      { name: 'Frutas & Frutales Ancestrales', description: 'Cosechas de montaña en su punto astronómico de madurez.', icon: 'Leaf' },
+      { name: 'Plantas Medicinales & Hierbas', description: 'Aromáticas secadas al sol para infusión y botica natural.', icon: 'Flower2' },
+      { name: 'Aceite de Oliva Extra Virgen', description: 'Prensado en frío de olivares cuidados ecológicamente.', icon: 'Sun' },
+      { name: 'Conservas Artesanales & Miel', description: 'Elaboraciones artesanales puras sin conservantes químicos.', icon: 'Sparkles' },
+      { name: 'Cosmética Botánica Natural', description: 'Extractos vegetales e hidrolatos elaborados con hierbas de la finca.', icon: 'ShieldCheck' }
+    ]
+  },
+  {
     id: 'bodega-stella-crinita',
     name: 'Bodega Stella Crinita',
     category: 'Winery',
@@ -323,6 +396,120 @@ export const PRODUCERS: Producer[] = [
 ];
 
 export const PRODUCTS: Product[] = [
+  // Finca Biodinámica Cosmos (Lavalle, Mendoza)
+  {
+    id: 'finca-cosmos-vino-artesanal-criolla',
+    name: 'Finca Cosmos Criolla Grande Natural 2023',
+    subtitle: 'Vino artesanal de viñedo centenario en Lavalle, fermentado en tinaja',
+    category: 'Wine',
+    price: 18400,
+    unit: 'Botella 750ml',
+    producerId: 'finca-biodinamica-cosmos',
+    producerName: 'Finca Biodinámica Cosmos',
+    location: 'Lavalle, Mendoza',
+    harvestDate: 'Marzo 2023 (Día de Fruto)',
+    images: [
+      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Elaborado artesanalmente en Lavalle a partir de uvas criollas centenarias de la finca viva. Fermentación silvestre sin agregados químicos.',
+    biodynamicNotes: 'Cultivado bajo el organismo granja biodinámico en el oasis norte de Lavalle.',
+    suggestedPairings: ['Empanadas mendocinas', 'Verduras asadas a las brasas', 'Quesos de cabra'],
+    inStock: true,
+    stockCount: 16,
+    badge: 'Artisan Winery • Lavalle',
+    rating: 5.0,
+    reviewCount: 38
+  },
+  {
+    id: 'finca-cosmos-cesta-hortalizas',
+    name: 'Cesta de Hortalizas Biodinámicas Cosmos',
+    subtitle: 'Verduras vivas de la huerta viva en Lavalle, cosechadas en día de raíz',
+    category: 'Fresh Vegetables',
+    price: 15800,
+    unit: 'Caja de 5kg',
+    producerId: 'finca-biodinamica-cosmos',
+    producerName: 'Finca Biodinámica Cosmos',
+    location: 'Lavalle, Mendoza',
+    harvestDate: 'Día de Entrega',
+    images: [
+      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Cosechadas al amanecer en la huerta de Lavalle. Incluye raíces, lechugas reliquia y acelga cultivadas con compost enriquecido.',
+    biodynamicNotes: 'Libre de pesticidas sintéticos y regada con cuidado biológico.',
+    inStock: true,
+    stockCount: 18,
+    badge: 'Cosecha Fresca de Huerta',
+    rating: 4.9,
+    reviewCount: 29
+  },
+  {
+    id: 'finca-cosmos-infusion-medicinal',
+    name: 'Infusión Botánica de Hierbas & Plantas Medicinales',
+    subtitle: 'Mezcla de lavanda, jarilla y cedrón de la huerta aromática de Lavalle',
+    category: 'Tea',
+    price: 4200,
+    unit: 'Bolsa 100g',
+    producerId: 'finca-biodinamica-cosmos',
+    producerName: 'Finca Biodinámica Cosmos',
+    location: 'Lavalle, Mendoza',
+    harvestDate: 'Febrero 2024 (Día de Flor)',
+    images: [
+      'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Plantas medicinales y aromáticas cultivadas y secadas a la sombra en Finca Biodinámica Cosmos.',
+    biodynamicNotes: 'Recolectadas en la fase lunar óptima para preservar aceites esenciales.',
+    inStock: true,
+    stockCount: 24,
+    badge: 'Botica Natural',
+    rating: 4.9,
+    reviewCount: 22
+  },
+  {
+    id: 'finca-cosmos-aceite-oliva',
+    name: 'Aceite de Oliva Extra Virgen Cosmos Arauco',
+    subtitle: 'Prensado en frío de olivares agroecológicos de Lavalle',
+    category: 'Olive Oil',
+    price: 13900,
+    unit: 'Botella de vidrio 500ml',
+    producerId: 'finca-biodinamica-cosmos',
+    producerName: 'Finca Biodinámica Cosmos',
+    location: 'Lavalle, Mendoza',
+    harvestDate: 'Mayo 2024',
+    images: [
+      'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Olivas maduradas al sol de Lavalle, cosechadas a mano e inmediatamente prensadas mecánicamente.',
+    biodynamicNotes: 'Suelo de olivar protegido con abonos verdes y biodiversidad animal.',
+    inStock: true,
+    stockCount: 30,
+    badge: 'Prensado en Frío',
+    rating: 5.0,
+    reviewCount: 31
+  },
+  {
+    id: 'finca-cosmos-cosmetica-hidrolato',
+    name: 'Hidrolato Orgánico de Lavanda & Jarilla',
+    subtitle: 'Cosmética botánica pura extraída por destilación al vapor',
+    category: 'Natural Cosmetics',
+    price: 6500,
+    unit: 'Frasco de vidrio con brumizador 100ml',
+    producerId: 'finca-biodinamica-cosmos',
+    producerName: 'Finca Biodinámica Cosmos',
+    location: 'Lavalle, Mendoza',
+    harvestDate: 'Marzo 2024',
+    images: [
+      'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=800'
+    ],
+    story: 'Tónico facial y corporal 100% vegetal elaborado con flores y hojas destiladas de Finca Biodinámica Cosmos.',
+    biodynamicNotes: 'Extractos puros libres de aromas sintéticos, parabenos o derivados del petróleo.',
+    inStock: true,
+    stockCount: 15,
+    badge: 'Cosmética Botánica',
+    rating: 4.9,
+    reviewCount: 19
+  },
+
   // Bodega Stella Crinita (Winery)
   {
     id: 'stella-crinita-malbec',

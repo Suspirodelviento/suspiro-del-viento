@@ -31,6 +31,7 @@ export const ProductsPage: React.FC = () => {
     'Fruits',
     'Flours',
     'Tea',
+    'Natural Cosmetics',
     'Natural Preserves'
   ];
 
@@ -141,7 +142,7 @@ export const ProductsPage: React.FC = () => {
                   : 'bg-[#F2EFE8] text-[#524B3B] hover:bg-[#E5E0D0]'
               }`}
             >
-              {cat === 'Wine' ? 'Vinos' : cat === 'Olive Oil' ? 'Aceite de Oliva' : cat === 'Honey' ? 'Miel' : cat === 'Fresh Vegetables' ? 'Hortalizas' : cat === 'Fruits' ? 'Frutas' : cat === 'Flours' ? 'Harinas' : cat === 'Natural Preserves' ? 'Conservas' : cat}
+              {cat === 'Wine' ? 'Vinos' : cat === 'Olive Oil' ? 'Aceite de Oliva' : cat === 'Honey' ? 'Miel' : cat === 'Fresh Vegetables' ? 'Hortalizas' : cat === 'Fruits' ? 'Frutas' : cat === 'Flours' ? 'Harinas' : cat === 'Tea' ? 'Tés & Infusiones' : cat === 'Natural Cosmetics' ? 'Cosmética Botánica' : cat === 'Natural Preserves' ? 'Conservas' : cat}
             </button>
           ))}
         </div>

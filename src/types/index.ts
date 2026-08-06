@@ -7,17 +7,23 @@ export interface ProducerContact {
   instagram?: string;
 }
 
+export interface FarmExperience {
+  title: string;
+  description: string;
+  tag?: string;
+}
+
 export interface Producer {
   id: string;
   name: string;
   category: 'Winery' | 'Biodynamic Farm';
   status?: 'Open' | 'Temporarily Closed';
   tagline: string;
-  region: 'Uco Valley' | 'Luján de Cuyo' | 'Maipú' | 'San Rafael' | 'Valle de Uco';
+  region: 'Uco Valley' | 'Luján de Cuyo' | 'Maipú' | 'San Rafael' | 'Valle de Uco' | 'Lavalle';
   location: string;
   coordinates: { lat: number; lng: number };
   yearsFarming: number;
-  certification: string; // e.g. "Demeter Certified Biodynamic"
+  certification: string;
   description: string;
   story: string;
   philosophy: string;
@@ -28,13 +34,15 @@ export interface Producer {
   sizeHectares: number;
   familyHistory: string;
   contact: ProducerContact;
+  experiences?: FarmExperience[];
+  produceCategories?: { name: string; description: string; icon: string }[];
 }
 
 export interface Product {
   id: string;
   name: string;
   subtitle: string;
-  category: 'Fresh Vegetables' | 'Fruits' | 'Eggs' | 'Honey' | 'Olive Oil' | 'Wine' | 'Herbs' | 'Grains' | 'Flours' | 'Seeds' | 'Natural Preserves' | 'Tea';
+  category: 'Fresh Vegetables' | 'Fruits' | 'Eggs' | 'Honey' | 'Olive Oil' | 'Wine' | 'Herbs' | 'Grains' | 'Flours' | 'Seeds' | 'Natural Preserves' | 'Tea' | 'Natural Cosmetics';
   price: number; // in ARS display
   unit: string;
   producerId: string;
