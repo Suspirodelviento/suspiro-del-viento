@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, UserProfile } from '../types';
-import { PRODUCTS, MENDOZA_DELIVERY_ZONES } from '../data/mockData';
+import { Product, CartItem, Order, UserProfile, Producer } from '../types';
+import { PRODUCTS, PRODUCERS, MENDOZA_DELIVERY_ZONES } from '../data/mockData';
 import { getDefaultUser, MOCK_USERS, createMockUserFromInput } from '../utils/mockAuth';
 import { showSuccess, showError } from '../utils/toast';
 
 interface ShopContextType {
   products: Product[];
+  producers: Producer[];
   cart: CartItem[];
   favorites: string[];
   addToCart: (product: Product, quantity?: number) => void;
@@ -38,12 +39,23 @@ interface ShopContextType {
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   availableMockUsers: UserProfile[];
+  // Import Center actions
+  addProducer: (producer: Producer) => void;
+  addProducts: (newProducts: Product[]) => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products] = useState<Product[]>(PRODUCTS);
+  const [producers, setProducers] = useState<Producer[]>(() => {
+    const saved = localStorage.getItem('biomendoza_producers');
+    return saved ? JSON.parse(saved) : PRODUCERS;
+  });
+
+  const [products, setProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem('biomendoza_products');
+    return saved ? JSON.parse(saved) : PRODUCTS;
+  });
   
   // Dynamic User State
   const [user, setUser] = useState<UserProfile>(() => {
@@ -105,6 +117,14 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [orders]);
 
   useEffect(() => {
+    localStorage.setItem('biomendoza_producers', JSON.stringify(producers));
+  }, [producers]);
+
+  useEffect(() => {
+    localStorage.setItem('biomendoza_products', JSON.stringify(products));
+  }, [products]);
+
+  useEffect(() => {
     localStorage.setItem('biomendoza_logged_in', String(isLoggedIn));
   }, [isLoggedIn]);
 
@@ -112,8 +132,34 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('biomendoza_user', JSON.stringify(user));
   }, [user]);
 
+  const addProducer = (newProducer: Producer) => {
+    setProducers((prev) => {
+      const idx = prev.findIndex((p) => p.id === newProducer.id || p.name.toLowerCase() === newProducer.name.toLowerCase());
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = newProducer;
+        return copy;
+      }
+      return [newProducer, ...prev];
+    });
+  };
+
+  const addProducts = (newProducts: Product[]) => {
+    setProducts((prev) => {
+      const updated = [...prev];
+      newProducts.forEach((p) => {
+        const existingIdx = updated.findIndex((item) => item.id === p.id);
+        if (existingIdx >= 0) {
+          updated[existingIdx] = p;
+        } else {
+          updated.unshift(p);
+        }
+      });
+      return updated;
+    });
+  };
+
   const login = (email: string, name?: string) => {
-    // Check if matching mock user
     const existing = MOCK_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
     const newUser = existing ? existing : createMockUserFromInput(email, name);
 
@@ -221,6 +267,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <ShopContext.Provider
       value={{
         products,
+        producers,
         cart,
         favorites,
         addToCart,
@@ -251,7 +298,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         isAuthModalOpen,
         setIsAuthModalOpen,
-        availableMockUsers: MOCK_USERS
+        availableMockUsers: MOCK_USERS,
+        addProducer,
+        addProducts
       }}
     >
       {children}
