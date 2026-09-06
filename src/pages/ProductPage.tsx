@@ -9,28 +9,30 @@ import { Label } from "@/components/ui/label";
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { wines, addToCart } = useWineStore();
+  const { wines, addToCart, catalogLoading, catalogError } = useWineStore();
   const wine = wines.find((w) => w.slug === slug);
   const otherWines = wines.filter(w => w.line === wine?.line && w.slug !== slug);
 
   const [quantity, setQuantity] = useState(1);
   const [format, setFormat] = useState<"bottle" | "box">("bottle");
 
+  if (catalogLoading) {
+    return <div className="py-40 text-center text-sm uppercase tracking-[0.2em] text-muted-foreground">Cargando vino</div>;
+  }
+
   if (!wine) {
-    return <div className="text-center py-40">Vino no encontrado</div>;
+    return <div className="py-40 text-center">{catalogError ?? "Vino no encontrado"}</div>;
   }
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-        addToCart(wine, format === 'box');
-    }
+    addToCart(wine, format === "box", quantity);
     toast({
       title: "Producto añadido",
-      description: `${quantity} x ${wine.name} (${format === 'box' ? 'Caja de 6' : 'Botella'}) fue añadido al carrito.`,
-    })
+      description: `${quantity} x ${wine.name} (${format === "box" ? "Caja de 6" : "Botella"}) fue añadido al carrito.`,
+    });
   };
 
-  const price = format === 'box' ? wine.price * 6 * 0.9 : wine.price;
+  const price = format === "box" ? wine.price * 6 * 0.9 : wine.price;
 
   return (
     <div className="container mx-auto py-20 md:py-24 px-4">
@@ -58,7 +60,7 @@ const ProductPage = () => {
 
           <div className="mt-6">
             <p className="font-sans uppercase tracking-widest text-sm text-foreground">Formato</p>
-            <RadioGroup defaultValue="bottle" onValueChange={(value) => setFormat(value as any)} className="mt-2 flex space-x-4">
+            <RadioGroup defaultValue="bottle" onValueChange={(value) => setFormat(value as "bottle" | "box")} className="mt-2 flex space-x-4">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="bottle" id="bottle" />
                 <Label htmlFor="bottle">Botella</Label>

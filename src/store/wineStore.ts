@@ -1,10 +1,12 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Wine {
   id: string;
   slug: string;
   name: string;
-  line: 'VINO FINO DE MESA' | 'CRUZA';
+  line: string;
   variety: string;
   vintage: number;
   image: string;
@@ -15,7 +17,7 @@ export interface Wine {
   province: string;
   price: number;
   stock: number;
-  status: 'available' | 'unavailable';
+  status: "available" | "unavailable";
   isFeatured: boolean;
 }
 
@@ -24,96 +26,126 @@ export interface CartItem extends Wine {
   isBox: boolean;
 }
 
+interface ProductImageRow {
+  image_url: string;
+  position: number;
+}
+
+interface ProductRow {
+  id: string;
+  slug: string;
+  name: string;
+  collection: string;
+  variety: string;
+  vintage: number;
+  description: string;
+  price: number;
+  stock: number;
+  active: boolean;
+  featured: boolean;
+  product_images: ProductImageRow[] | null;
+}
+
 interface WineStoreState {
   wines: Wine[];
   cart: CartItem[];
-  addToCart: (wine: Wine, isBox: boolean) => void;
+  catalogLoading: boolean;
+  catalogError: string | null;
+  fetchProducts: () => Promise<void>;
+  addToCart: (wine: Wine, isBox: boolean, quantity?: number) => void;
   removeFromCart: (wineId: string, isBox: boolean) => void;
   updateQuantity: (wineId: string, isBox: boolean, quantity: number) => void;
   clearCart: () => void;
 }
 
-const initialWines: Wine[] = [
-  {
-    id: '1',
-    slug: 'atardecer-rosado',
-    name: 'Atardecer',
-    line: 'VINO FINO DE MESA',
-    variety: 'Rosado',
-    vintage: 2023,
-    image: '/images/wines/atardecer.png',
-    gallery: [],
-    shortDescription: 'Un rosado que captura la luz del atardecer en el Valle de Uco.',
-    history: 'Nacido de la búsqueda de un vino fresco y expresivo, Atardecer es nuestro homenaje a los colores del cielo mendocino.',
-    region: 'Tunuyán, Valle de Uco',
-    province: 'Mendoza',
-    price: 12500,
-    stock: 100,
-    status: 'available',
-    isFeatured: true,
-  },
-  {
-    id: '2',
-    slug: 'divaricata-blanco',
-    name: 'Divaricata',
-    line: 'VINO FINO DE MESA',
-    variety: 'Blanco',
-    vintage: 2023,
-    image: '/images/wines/divaricata.png',
-    gallery: [],
-    shortDescription: 'Un blanco fresco y floral, inspirado en la flora nativa de Mendoza.',
-    history: 'Divaricata es el nombre de una flor silvestre que crece en nuestros viñedos, un símbolo de la biodiversidad que buscamos preservar.',
-    region: 'Tunuyán, Valle de Uco',
-    province: 'Mendoza',
-    price: 12500,
-    stock: 100,
-    status: 'available',
-    isFeatured: true,
-  },
-  {
-    id: '3',
-    slug: 'rubiginosa-tinto',
-    name: 'Rubiginosa',
-    line: 'VINO FINO DE MESA',
-    variety: 'Tinto',
-    vintage: 2023,
-    image: '/images/wines/rubiginosa.png',
-    gallery: [],
-    shortDescription: 'Un tinto que evoca la calidez de la tierra y la fruta madura.',
-    history: 'Rubiginosa, o rosa mosqueta, crece salvaje en los Andes. Este vino comparte su carácter resiliente y su encanto rústico.',
-    region: 'Tunuyán, Valle de Uco',
-    province: 'Mendoza',
-    price: 13500,
-    stock: 100,
-    status: 'available',
-    isFeatured: true,
-  },
-];
+const mapProduct = (product: ProductRow): Wine => {
+  const gallery = [...(product.product_images ?? [])]
+    .sort((a, b) => a.position - b.position)
+    .map((image) => image.image_url);
 
-export const useWineStore = create<WineStoreState>((set) => ({
-  wines: initialWines,
-  cart: [],
-  addToCart: (wine, isBox) =>
-    set((state) => {
-      const existingItem = state.cart.find((item) => item.id === wine.id && item.isBox === isBox);
-      if (existingItem) {
-        return {
-          cart: state.cart.map((item) =>
-            item.id === wine.id && item.isBox === isBox
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
-      }
-      return { cart: [...state.cart, { ...wine, quantity: 1, isBox }] };
+  return {
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    line: product.collection,
+    variety: product.variety,
+    vintage: product.vintage,
+    image: gallery[0] ?? "/placeholder.svg",
+    gallery,
+    shortDescription: product.description,
+    history: product.description,
+    region: "Tunuyán, Valle de Uco",
+    province: "Mendoza",
+    price: Number(product.price),
+    stock: product.stock,
+    status: product.active && product.stock > 0 ? "available" : "unavailable",
+    isFeatured: product.featured,
+  };
+};
+
+export const useWineStore = create<WineStoreState>()(
+  persist(
+    (set) => ({
+      wines: [],
+      cart: [],
+      catalogLoading: true,
+      catalogError: null,
+      fetchProducts: async () => {
+        set({ catalogLoading: true, catalogError: null });
+        const { data, error } = await supabase
+          .from("products")
+          .select("id, slug, name, collection, variety, vintage, description, price, stock, active, featured, product_images(image_url, position)")
+          .eq("active", true)
+          .order("created_at", { ascending: true });
+
+        if (error) {
+          set({ catalogLoading: false, catalogError: "No pudimos cargar los vinos." });
+          return;
+        }
+
+        const wines = (data as ProductRow[]).map(mapProduct);
+        set((state) => ({
+          wines,
+          catalogLoading: false,
+          cart: state.cart.flatMap((item) => {
+            const currentWine = wines.find((wine) => wine.slug === item.slug);
+            return currentWine ? [{ ...currentWine, quantity: item.quantity, isBox: item.isBox }] : [];
+          }),
+        }));
+      },
+      addToCart: (wine, isBox, quantity = 1) =>
+        set((state) => {
+          const requested = Math.max(1, Math.floor(quantity));
+          const existingItem = state.cart.find((item) => item.id === wine.id && item.isBox === isBox);
+          if (existingItem) {
+            return {
+              cart: state.cart.map((item) =>
+                item.id === wine.id && item.isBox === isBox
+                  ? { ...item, quantity: item.quantity + requested }
+                  : item,
+              ),
+            };
+          }
+          return { cart: [...state.cart, { ...wine, quantity: requested, isBox }] };
+        }),
+      removeFromCart: (wineId, isBox) =>
+        set((state) => ({
+          cart: state.cart.filter((item) => !(item.id === wineId && item.isBox === isBox)),
+        })),
+      updateQuantity: (wineId, isBox, quantity) =>
+        set((state) => ({
+          cart:
+            quantity < 1
+              ? state.cart.filter((item) => !(item.id === wineId && item.isBox === isBox))
+              : state.cart.map((item) =>
+                  item.id === wineId && item.isBox === isBox ? { ...item, quantity } : item,
+                ),
+        })),
+      clearCart: () => set({ cart: [] }),
     }),
-  removeFromCart: (wineId, isBox) =>
-    set((state) => ({ cart: state.cart.filter((item) => !(item.id === wineId && item.isBox === isBox)) })),
-  updateQuantity: (wineId, isBox, quantity) =>
-    set((state) => ({
-      cart: state.cart.map((item) =>
-        item.id === wineId && item.isBox === isBox ? { ...item, quantity } : item
-      ),
-    })),
-  clearCart: () => set({ cart: [] }),
-}));
+    {
+      name: "suspiro-del-viento-cart",
+      partialize: (state) => ({ cart: state.cart }),
+    },
+  ),
+);

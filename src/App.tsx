@@ -15,15 +15,20 @@ import Contacto from "./pages/Contacto";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import VinoFinoDeMesaPage from "./pages/collections/VinoFinoDeMesa";
+import AdminPage from "./pages/AdminPage";
+import CatalogLoader from "./components/CatalogLoader";
+import { SessionContextProvider } from "./contexts/SessionContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <SessionContextProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <CatalogLoader />
         <Header />
         <main className="pt-20 bg-background font-sans">
           <Routes>
@@ -36,6 +41,7 @@ const App = () => (
             <Route path="/producto/:slug" element={<ProductPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -43,6 +49,7 @@ const App = () => (
         <Footer />
       </BrowserRouter>
     </TooltipProvider>
+    </SessionContextProvider>
   </QueryClientProvider>
 );
 
