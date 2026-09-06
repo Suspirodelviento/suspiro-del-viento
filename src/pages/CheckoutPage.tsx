@@ -113,7 +113,18 @@ const CheckoutPage = () => {
         <div>
           <h2 className="mb-6 font-serif text-2xl font-bold">Resumen del pedido</h2>
           <div className="space-y-5">
-            {cart.map((item) => (/* ... (renderizado de items) */))}
+            {cart.map((item) => (
+              <div key={`${item.id}-${item.isBox}`} className="flex items-center justify-between gap-5 border-b border-border/60 pb-5">
+                <div className="flex items-center gap-4">
+                  <img src={item.image} alt={item.name} className="h-20 w-14 object-contain" />
+                  <div>
+                    <p className="font-semibold">{item.name} <span className="text-sm text-muted-foreground">× {item.quantity}</span></p>
+                    <p className="text-sm text-muted-foreground">{item.variety} · {item.isBox ? "Caja de 6" : "Botella"}</p>
+                  </div>
+                </div>
+                <p>${(item.price * item.quantity * (item.isBox ? 6 * 0.9 : 1)).toLocaleString("es-AR")}</p>
+              </div>
+            ))}
           </div>
           <div className="mt-6 space-y-3 border-t pt-6 text-lg">
             <div className="flex justify-between"><p>Subtotal</p><p className="font-medium">${subtotal.toLocaleString("es-AR")}</p></div>
