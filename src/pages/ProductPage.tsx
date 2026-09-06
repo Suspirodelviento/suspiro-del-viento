@@ -39,6 +39,13 @@ const ProductPage = () => {
       <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         <div className="text-center">
           <AnimatedImage src={wine.image} alt={wine.name} className="w-full h-auto object-contain max-h-[70vh]" />
+          {wine.gallery.length > 1 && (
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              {wine.gallery.slice(1).map((img, index) => (
+                <AnimatedImage key={index} src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-cover rounded-lg shadow-sm" />
+              ))}
+            </div>
+          )}
         </div>
         <div className="pt-10">
           <p className="font-sans uppercase tracking-widest text-sm text-muted-foreground">{wine.line}</p>
