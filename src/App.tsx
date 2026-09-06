@@ -14,6 +14,7 @@ import Tienda from "./pages/Tienda";
 import Contacto from "./pages/Contacto";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import VinoFinoDeMesaPage from "./pages/collections/VinoFinoDeMesa";
 
 const queryClient = new QueryClient();
 
@@ -28,10 +29,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/vinos" element={<Vinos />} />
+            <Route path="/vinos/vino-fino-de-mesa" element={<VinoFinoDeMesaPage />} />
             <Route path="/historia" element={<Historia />} />
             <Route path="/lugar" element={<Lugar />} />
             <Route path="/tienda" element={<Tienda />} />
-            <Route path="/tienda/:id" element={<ProductPage />} />
+            <Route path="/producto/:slug" element={<ProductPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/contacto" element={<Contacto />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

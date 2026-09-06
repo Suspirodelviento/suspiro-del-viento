@@ -14,7 +14,7 @@ const Tienda = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
         {wines.map((wine) => (
           <div key={wine.id} className="border border-border/50 rounded-lg p-4 text-center group">
-            <Link to={`/tienda/${wine.id}`}>
+            <Link to={`/producto/${wine.slug}`}>
               <div className="overflow-hidden rounded-md mb-4">
                 <img src={wine.image} alt={wine.name} className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
@@ -23,7 +23,7 @@ const Tienda = () => {
               <p className="font-bold text-lg mt-2">${wine.price.toLocaleString('es-AR')}</p>
             </Link>
             <Button asChild className="mt-4">
-              <Link to={`/tienda/${wine.id}`}>Ver Detalles</Link>
+              <Link to={`/producto/${wine.slug}`}>Ver Detalles</Link>
             </Button>
           </div>
         ))}
