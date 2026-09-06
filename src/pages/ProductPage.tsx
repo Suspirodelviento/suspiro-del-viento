@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/use-toast";
 import AnimatedImage from "@/components/AnimatedImage";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -38,11 +39,18 @@ const ProductPage = () => {
     <div className="container mx-auto py-20 md:py-24 px-4">
       <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         <div className="text-center">
-          <AnimatedImage src={wine.image} alt={wine.name} className="w-full h-auto object-contain max-h-[70vh]" />
+          <AnimatedImage src={wine.image} alt={wine.name} className="w-full h-auto object-contain max-h-[70vh] cursor-pointer" />
           {wine.gallery.length > 1 && (
             <div className="grid grid-cols-3 gap-4 mt-4">
               {wine.gallery.slice(1).map((img, index) => (
-                <AnimatedImage key={index} src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-cover rounded-lg shadow-sm" />
+                <Dialog key={index}>
+                  <DialogTrigger asChild>
+                    <AnimatedImage src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-cover rounded-lg shadow-sm cursor-pointer" />
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl">
+                    <img src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-contain" />
+                  </DialogContent>
+                </Dialog>
               ))}
             </div>
           )}
@@ -57,11 +65,19 @@ const ProductPage = () => {
           <div className="mt-8 border-t pt-8 space-y-4">
              <div>
                 <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Origen</h3>
-                <p className="text-muted-foreground mt-1">{wine.region}, {wine.province}, Argentina</p>
+                <p className="text-muted-foreground mt-1">{wine.region}</p>
             </div>
              <div>
                 <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Variedad</h3>
-                <p className="text-muted-foreground mt-1">{wine.variety} | {wine.vintage}</p>
+                <p className="text-muted-foreground mt-1">{wine.variety}</p>
+            </div>
+            <div>
+                <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Datos Técnicos</h3>
+                <p className="text-muted-foreground mt-1">{wine.technicalData}</p>
+            </div>
+            <div>
+                <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Añada</h3>
+                <p className="text-muted-foreground mt-1">{wine.vintage}</p>
             </div>
           </div>
 

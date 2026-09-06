@@ -19,6 +19,7 @@ export interface Wine {
   stock: number;
   status: "available" | "unavailable";
   isFeatured: boolean;
+  technicalData: string;
 }
 
 export interface CartItem extends Wine {
@@ -43,6 +44,7 @@ interface ProductRow {
   stock: number;
   active: boolean;
   featured: boolean;
+  technical_data: string | null;
   product_images: ProductImageRow[] | null;
 }
 
@@ -80,12 +82,13 @@ const mapProduct = (product: ProductRow): Wine => {
     stock: product.stock,
     status: product.active && product.stock > 0 ? "available" : "unavailable",
     isFeatured: product.featured,
+    technicalData: product.technical_data ?? '',
   };
 };
 
 export const useWineStore = create<WineStoreState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       wines: [],
       cart: [],
       catalogLoading: true,
@@ -94,7 +97,7 @@ export const useWineStore = create<WineStoreState>()(
         set({ catalogLoading: true, catalogError: null });
         const { data, error } = await supabase
           .from("products")
-          .select("id, slug, name, collection, variety, vintage, description, price, stock, active, featured, product_images(image_url, position)")
+          .select("*, product_images(image_url, position)")
           .eq("active", true)
           .order("created_at", { ascending: true });
 

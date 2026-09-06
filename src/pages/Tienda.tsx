@@ -15,8 +15,8 @@ const Tienda = () => {
         {wines.map((wine) => (
           <div key={wine.id} className="border border-border/50 rounded-lg p-4 text-center group">
             <Link to={`/producto/${wine.slug}`}>
-              <div className="overflow-hidden rounded-md mb-4">
-                <img src={wine.image} alt={wine.name} className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div className="overflow-hidden rounded-md mb-4 h-80 flex items-center justify-center bg-secondary/30 p-4">
+                <img src={wine.image} alt={wine.name} className="max-h-full w-auto object-contain group-hover:scale-105 transition-transform duration-300" />
               </div>
               <h3 className="font-serif text-xl font-semibold">{wine.name}</h3>
               <p className="text-muted-foreground text-sm">{wine.line}</p>
