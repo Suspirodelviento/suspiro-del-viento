@@ -10,7 +10,7 @@ const Index = () => {
                style={{ backgroundImage: "url('/images/hero/01.jpg')" }}>
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-white px-4 flex flex-col items-center">
-          <img src="/images/logo.png" alt="Suspiro del Viento" className="w-4/5 max-w-md md:max-w-lg" />
+          <img src="/images/logo.png" alt="Suspiro del Viento" className="w-4/5 max-w-lg md:max-w-xl" />
           <p className="font-serif text-2xl md:text-3xl mt-4">
             que llega desde el oeste
           </p>

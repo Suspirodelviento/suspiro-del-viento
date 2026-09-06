@@ -16,7 +16,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Link to="/">
-          <img src="/images/logo.png" alt="Suspiro del Viento" className="h-24 w-auto" />
+          <img src="/images/logo.png" alt="Suspiro del Viento" className="h-28 w-auto" />
         </Link>
 
         <nav className="hidden md:flex items-center space-x-8">
