@@ -9,10 +9,8 @@ const Index = () => {
       <section className="relative h-screen w-full flex items-center justify-center text-center bg-cover bg-center"
                style={{ backgroundImage: "url('/images/hero/01.jpg')" }}>
         <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 text-white px-4">
-          <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-tight">
-            SUSPIRO DEL VIENTO
-          </h1>
+        <div className="relative z-10 text-white px-4 flex flex-col items-center">
+          <img src="/images/logo.png" alt="Suspiro del Viento" className="w-4/5 max-w-md md:max-w-lg" />
           <p className="font-serif text-2xl md:text-3xl mt-4">
             que llega desde el oeste
           </p>
