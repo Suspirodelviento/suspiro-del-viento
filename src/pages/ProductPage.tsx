@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useWineStore } from "@/store/wineStore";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -11,9 +11,8 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { wines, addToCart, catalogLoading, catalogError } = useWineStore();
-  const navigate = useNavigate();
-
-  const [wine, setWine] = useState(wines.find((w) => w.slug === slug));
+  
+  const [wine, setWine] = useState(() => wines.find((w) => w.slug === slug));
   const [quantity, setQuantity] = useState(1);
   const [format, setFormat] = useState<"bottle" | "box">("bottle");
 
