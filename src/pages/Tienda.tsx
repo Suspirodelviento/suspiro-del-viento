@@ -1,4 +1,4 @@
-import { useWineStore } from "../store/wineStore";
+import { useWineStore } from "@/store/wineStore";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
