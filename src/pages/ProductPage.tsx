@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useWineStore } from "@/store/wineStore";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -11,19 +11,28 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { wines, addToCart, catalogLoading, catalogError } = useWineStore();
-  const wine = wines.find((w) => w.slug === slug);
-  const otherWines = wines.filter(w => w.line === wine?.line && w.slug !== slug);
+  const navigate = useNavigate();
 
+  const [wine, setWine] = useState(wines.find((w) => w.slug === slug));
   const [quantity, setQuantity] = useState(1);
   const [format, setFormat] = useState<"bottle" | "box">("bottle");
 
-  if (catalogLoading) {
+  useEffect(() => {
+    const currentWine = wines.find((w) => w.slug === slug);
+    setWine(currentWine);
+    setQuantity(1);
+    window.scrollTo(0, 0);
+  }, [slug, wines]);
+
+  if (catalogLoading && !wine) {
     return <div className="py-40 text-center text-sm uppercase tracking-[0.2em] text-muted-foreground">Cargando vino</div>;
   }
 
   if (!wine) {
     return <div className="py-40 text-center">{catalogError ?? "Vino no encontrado"}</div>;
   }
+
+  const otherWines = wines.filter(w => w.line === wine.line && w.slug !== slug);
 
   const handleAddToCart = () => {
     addToCart(wine, format === "box", quantity);
@@ -39,16 +48,18 @@ const ProductPage = () => {
     <div className="container mx-auto py-20 md:py-24 px-4">
       <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         <div className="text-center">
-          <AnimatedImage src={wine.image} alt={wine.name} className="w-full h-auto object-contain max-h-[70vh] cursor-pointer" />
+          <AnimatedImage src={wine.image} alt={wine.name} className="w-full h-auto object-contain max-h-[70vh]" />
           {wine.gallery.length > 1 && (
             <div className="grid grid-cols-3 gap-4 mt-4">
               {wine.gallery.slice(1).map((img, index) => (
                 <Dialog key={index}>
                   <DialogTrigger asChild>
-                    <AnimatedImage src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-cover rounded-lg shadow-sm cursor-pointer" />
+                    <div className="overflow-hidden rounded-lg cursor-pointer">
+                      <AnimatedImage src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300" />
+                    </div>
                   </DialogTrigger>
-                  <DialogContent className="max-w-3xl">
-                    <img src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-contain" />
+                  <DialogContent className="max-w-3xl p-2 bg-transparent border-0">
+                    <img src={img} alt={`${wine.name} gallery image ${index + 1}`} className="w-full h-auto object-contain rounded-lg" />
                   </DialogContent>
                 </Dialog>
               ))}
