@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import AnimatedImage from "@/components/AnimatedImage";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -69,16 +70,21 @@ const Index = () => {
       {/* Our Wines Section */}
       <section className="py-20 md:py-32 bg-secondary/30">
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-serif text-4xl font-bold mb-12">Nuestros Vinos</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <AnimatedImage src="/images/wines/atardecer.png" alt="Vino Fino de Mesa" className="w-full h-auto object-contain" />
-            </div>
-            <div>
-              <h3 className="font-serif text-3xl font-bold">VINO FINO DE MESA</h3>
-              <p className="mt-4 text-muted-foreground">Una línea que captura la esencia de nuestros comienzos, la amistad y el trabajo artesanal.</p>
-              <Button className="mt-6">Ver Vinos</Button>
-            </div>
+          <div className="text-center">
+            <h2 className="text-center font-serif text-4xl font-bold">Nuestros Vinos</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              Una línea que captura la esencia de nuestros comienzos, la amistad y el trabajo artesanal.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 mt-12 items-center">
+              <AnimatedImage src="/images/wines/atardecer.png" alt="Vino Atardecer" className="w-full h-auto object-contain p-4" />
+              <AnimatedImage src="/images/wines/divaricata.png" alt="Vino Divaricata" className="w-full h-auto object-contain p-4" />
+              <AnimatedImage src="/images/wines/rubiginosa.png" alt="Vino Rubiginosa" className="w-full h-auto object-contain p-4" />
+          </div>
+          <div className="text-center mt-12">
+            <Button asChild>
+                <Link to="/tienda">Ver la colección</Link>
+            </Button>
           </div>
         </div>
       </section>
