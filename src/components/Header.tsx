@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import CartDrawer from "./CartDrawer";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 const Header = () => {
   const navLinks = [
