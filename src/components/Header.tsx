@@ -10,6 +10,7 @@ const Header = () => {
     { href: "/vinos/vino-fino-de-mesa", label: "Criollas" },
     { href: "/lugar", label: "Lugar" },
     { href: "/tienda", label: "Tienda" },
+    { href: "/contacto", label: "Contacto" },
   ];
 
   return (

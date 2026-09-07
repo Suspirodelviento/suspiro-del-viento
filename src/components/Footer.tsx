@@ -11,9 +11,9 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-start">
           <h4 className="font-sans text-sm uppercase tracking-widest text-foreground/80">Navegación</h4>
           <ul className="mt-4 space-y-2">
-            <li><Link to="/vinos" className="text-sm hover:text-primary">Vinos</Link></li>
             <li><Link to="/historia" className="text-sm hover:text-primary">Historia</Link></li>
-            <li><Link to="/lugar" className="text-sm hover:text-primary">El Lugar</Link></li>
+            <li><Link to="/vinos/vino-fino-de-mesa" className="text-sm hover:text-primary">Criollas</Link></li>
+            <li><Link to="/lugar" className="text-sm hover:text-primary">Lugar</Link></li>
             <li><Link to="/tienda" className="text-sm hover:text-primary">Tienda</Link></li>
             <li><Link to="/contacto" className="text-sm hover:text-primary">Contacto</Link></li>
           </ul>
