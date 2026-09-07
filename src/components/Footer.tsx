@@ -21,8 +21,8 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-start">
           <h4 className="font-sans text-sm uppercase tracking-widest text-foreground/80">Contacto</h4>
           <ul className="mt-4 space-y-2">
-            <li><a href="#" className="text-sm hover:text-primary">Instagram</a></li>
-            <li><a href="#" className="text-sm hover:text-primary">Email</a></li>
+            <li><a href="https://www.instagram.com/suspirodelviento_/?hl=en" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-primary">Instagram</a></li>
+            <li><a href="mailto:juli.suspirodelviento@gmail.com" className="text-sm hover:text-primary">Email</a></li>
           </ul>
         </div>
       </div>

@@ -5,11 +5,21 @@ const Contacto = () => {
       <p className="text-center text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
         Nos encantaría saber de ti. Escríbenos para consultas, visitas o simplemente para compartir una copa de vino.
       </p>
-      <div className="max-w-md mx-auto mt-12 text-center">
-        <p className="font-sans uppercase tracking-widest">Email</p>
-        <a href="mailto:contacto@suspirodelviento.com" className="text-xl hover:text-primary transition-colors">contacto@suspirodelviento.com</a>
-        <p className="font-sans uppercase tracking-widest mt-8">Instagram</p>
-        <a href="#" className="text-xl hover:text-primary transition-colors">@suspirodelviento</a>
+      <div className="max-w-md mx-auto mt-12 text-center space-y-8">
+        <div>
+          <p className="font-sans uppercase tracking-widest">Email</p>
+          <a href="mailto:juli.suspirodelviento@gmail.com" className="text-xl hover:text-primary transition-colors">juli.suspirodelviento@gmail.com</a>
+          <br />
+          <a href="mailto:emi.suspirodelviento@gmail.com" className="text-xl hover:text-primary transition-colors">emi.suspirodelviento@gmail.com</a>
+        </div>
+        <div>
+          <p className="font-sans uppercase tracking-widest">Teléfono</p>
+          <a href="tel:2622657364" className="text-xl hover:text-primary transition-colors">2622657364</a>
+        </div>
+        <div>
+          <p className="font-sans uppercase tracking-widest">Instagram</p>
+          <a href="https://www.instagram.com/suspirodelviento_/?hl=en" target="_blank" rel="noopener noreferrer" className="text-xl hover:text-primary transition-colors">@suspirodelviento_</a>
+        </div>
       </div>
     </div>
   );
