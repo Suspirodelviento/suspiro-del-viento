@@ -8,13 +8,11 @@ const Contacto = () => {
       <div className="max-w-md mx-auto mt-12 text-center space-y-8">
         <div>
           <p className="font-sans uppercase tracking-widest">Email</p>
-          <a href="mailto:juli.suspirodelviento@gmail.com" className="text-xl hover:text-primary transition-colors">juli.suspirodelviento@gmail.com</a>
-          <br />
-          <a href="mailto:emi.suspirodelviento@gmail.com" className="text-xl hover:text-primary transition-colors">emi.suspirodelviento@gmail.com</a>
+          <p className="text-xl text-foreground">juli.suspirodelviento@gmail.com / emi.suspirodelviento@gmail.com</p>
         </div>
         <div>
           <p className="font-sans uppercase tracking-widest">Teléfono</p>
-          <a href="tel:2622657364" className="text-xl hover:text-primary transition-colors">2622657364</a>
+          <p className="text-xl text-foreground">2622657364</p>
         </div>
         <div>
           <p className="font-sans uppercase tracking-widest">Instagram</p>
