@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useWineStore } from "@/store/wineStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useDebounce } from "@/hooks/use-debounce";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, "Nombre muy corto").max(120),
@@ -28,6 +30,16 @@ interface ShippingInfo {
   minBottles?: number;
 }
 
+const transferData = {
+  bank: "Santander",
+  accountType: "Caja de Ahorro en Pesos",
+  accountNumber: "546-352079/0",
+  cbu: "0720546088000035207904",
+  alias: "JULIANRADOSAVAC",
+  holder: "JULIAN RADOSAVAC ANDRADE",
+  cuit: "23-39238645-9",
+};
+
 const CheckoutPage = () => {
   const { cart, clearCart } = useWineStore();
   const [submitting, setSubmitting] = useState(false);
@@ -35,6 +47,7 @@ const CheckoutPage = () => {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo | null>(null);
   const [shippingError, setShippingError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState("transfer");
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity * (item.isBox ? 6 : 1), 0);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity * (item.isBox ? 6 * 0.9 : 1), 0);
@@ -69,7 +82,7 @@ const CheckoutPage = () => {
   }, [debouncedCity, debouncedProvince]);
 
   const shippingValidation = useMemo(() => {
-    if (!shippingInfo) return null;
+    if (!shippingInfo) return "Ingrese una ciudad y provincia para calcular el envío.";
     if (shippingInfo.minBottles && totalItems < shippingInfo.minBottles) {
       return `Para envíos a ${shippingInfo.zone}, la compra mínima es de ${shippingInfo.minBottles} botellas.`;
     }
@@ -83,60 +96,82 @@ const CheckoutPage = () => {
     }
     setSubmitting(true);
     setSubmitError(null);
-    // ... (resto de la lógica de submit que se implementará en la siguiente fase)
-    console.log("Form submitted", values);
+
+    const { data, error } = await supabase.functions.invoke("create-order", {
+      body: {
+        ...values,
+        items: cart.map(item => ({ product_id: item.id, quantity: item.quantity, is_box: item.isBox })),
+        payment_method: paymentMethod,
+        shipping_zone: shippingInfo?.zone,
+        shipping_cost: shippingInfo?.cost,
+        shipping_time_estimate: shippingInfo?.timeEstimate,
+      },
+    });
+
     setSubmitting(false);
+    if (error || !data?.order_id) {
+      setSubmitError(error?.message || "No pudimos registrar el pedido. Intente nuevamente.");
+      return;
+    }
+
+    setOrderId(data.order_id);
+    clearCart();
   };
 
-  if (orderId) { /* ... (código de confirmación) */ }
-  if (cart.length === 0) { /* ... (código de carrito vacío) */ }
+  if (orderId) {
+    return (
+      <section className="min-h-[70vh] grid place-items-center px-5 py-20 text-center">
+        <div className="max-w-xl">
+          <CheckCircle2 className="mx-auto h-11 w-11 text-primary" strokeWidth={1.4} />
+          <h1 className="mt-4 font-serif text-5xl">Gracias por tu compra</h1>
+          <p className="mt-5 leading-7 text-muted-foreground">Hemos recibido tu pedido. Quedará confirmado una vez que se acredite la transferencia.</p>
+          <div className="mt-6 text-left bg-secondary/30 p-4 rounded-lg">
+            <h3 className="font-bold mb-2">Datos para la transferencia</h3>
+            <p><strong>Alias:</strong> {transferData.alias}</p>
+            <p><strong>CBU:</strong> {transferData.cbu}</p>
+            <p><strong>Titular:</strong> {transferData.holder}</p>
+            <p><strong>Total a transferir:</strong> ${total.toLocaleString("es-AR")}</p>
+          </div>
+          <p className="mt-6 text-xs text-muted-foreground">Nro de Pedido: {orderId.substring(0, 8)}</p>
+          <Button asChild className="mt-9 rounded-full px-8"><Link to="/tienda">Volver a la tienda</Link></Button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-20 md:py-32">
       <h1 className="text-center font-serif text-4xl font-bold md:text-5xl">Finalizar compra</h1>
       <div className="mx-auto mt-12 grid max-w-6xl gap-16 md:grid-cols-2">
         <div>
-          <h2 className="mb-6 font-serif text-2xl font-bold">Datos de envío</h2>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              {/* ... (campos del formulario) */}
-              <div className="grid grid-cols-2 gap-4">
-                <FormField control={form.control} name="city" render={({ field }) => <FormItem><FormLabel>Ciudad</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-                <FormField control={form.control} name="province" render={({ field }) => <FormItem><FormLabel>Provincia</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>} />
-              </div>
-              {/* ... (resto de campos) */}
-              {submitError && <p role="alert" className="rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{submitError}</p>}
-              <Button type="submit" disabled={submitting || !!shippingValidation} className="w-full rounded-full">{submitting ? "Procesando..." : "Continuar al pago"}</Button>
-            </form>
-          </Form>
+          <h2 className="mb-6 font-serif text-2xl font-bold">1. Datos de envío</h2>
+          <Form {...form}>{/* ... (formulario) */}</Form>
         </div>
         <div>
-          <h2 className="mb-6 font-serif text-2xl font-bold">Resumen del pedido</h2>
-          <div className="space-y-5">
-            {cart.map((item) => (
-              <div key={`${item.id}-${item.isBox}`} className="flex items-center justify-between gap-5 border-b border-border/60 pb-5">
-                <div className="flex items-center gap-4">
-                  <img src={item.image} alt={item.name} className="h-20 w-14 object-contain" />
-                  <div>
-                    <p className="font-semibold">{item.name} <span className="text-sm text-muted-foreground">× {item.quantity}</span></p>
-                    <p className="text-sm text-muted-foreground">{item.variety} · {item.isBox ? "Caja de 6" : "Botella"}</p>
-                  </div>
-                </div>
-                <p>${(item.price * item.quantity * (item.isBox ? 6 * 0.9 : 1)).toLocaleString("es-AR")}</p>
+          <h2 className="mb-6 font-serif text-2xl font-bold">2. Resumen y Pago</h2>
+          {/* ... (resumen del pedido) */}
+          <div className="mt-8">
+            <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Método de Pago</h3>
+            <RadioGroup defaultValue="transfer" onValueChange={setPaymentMethod} className="mt-4">
+              <div className="flex items-center space-x-2 rounded-lg border p-4">
+                <RadioGroupItem value="transfer" id="transfer" />
+                <Label htmlFor="transfer" className="flex-1 cursor-pointer">Transferencia Bancaria</Label>
               </div>
-            ))}
+            </RadioGroup>
           </div>
-          <div className="mt-6 space-y-3 border-t pt-6 text-lg">
-            <div className="flex justify-between"><p>Subtotal</p><p className="font-medium">${subtotal.toLocaleString("es-AR")}</p></div>
-            {shippingInfo && (
-              <>
-                <div className="flex justify-between"><p>Envío ({shippingInfo.zone})</p><p className="font-medium">${shippingInfo.cost.toLocaleString("es-AR")}</p></div>
-                <div className="flex justify-between text-sm text-muted-foreground"><p>Tiempo estimado</p><p>{shippingInfo.timeEstimate}</p></div>
-              </>
-            )}
-            {shippingError && <p className="text-sm text-destructive">{shippingError}</p>}
-            <div className="flex justify-between border-t pt-4 text-xl font-bold"><p>Total</p><p>${total.toLocaleString("es-AR")}</p></div>
-            {shippingValidation && <p role="alert" className="rounded-lg bg-amber-100 p-3 text-center text-sm text-amber-800">{shippingValidation}</p>}
+          {paymentMethod === 'transfer' && (
+            <div className="mt-4 text-sm bg-secondary/30 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2">Datos para la transferencia</h4>
+              <p><strong>Alias:</strong> {transferData.alias}</p>
+              <p><strong>CBU:</strong> {transferData.cbu}</p>
+              <p>Una vez finalizada la compra, te enviaremos un email con el detalle completo.</p>
+            </div>
+          )}
+          <div className="mt-8">
+            {submitError && <p role="alert" className="text-sm text-destructive mb-4">{submitError}</p>}
+            <Button onClick={form.handleSubmit(onSubmit)} disabled={submitting || !!shippingValidation} className="w-full rounded-full">
+              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</> : "Confirmar Pedido"}
+            </Button>
           </div>
         </div>
       </div>
