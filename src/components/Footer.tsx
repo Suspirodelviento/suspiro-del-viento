@@ -12,7 +12,7 @@ const Footer = () => {
           <h4 className="font-sans text-sm uppercase tracking-widest text-foreground/80">Navegación</h4>
           <ul className="mt-4 space-y-2">
             <li><Link to="/historia" className="text-sm hover:text-primary">Historia</Link></li>
-            <li><Link to="/vinos/vino-fino-de-mesa" className="text-sm hover:text-primary">Criollas</Link></li>
+            <li><Link to="/criollas" className="text-sm hover:text-primary">Criollas</Link></li>
             <li><Link to="/lugar" className="text-sm hover:text-primary">Lugar</Link></li>
             <li><Link to="/tienda" className="text-sm hover:text-primary">Tienda</Link></li>
             <li><Link to="/contacto" className="text-sm hover:text-primary">Contacto</Link></li>

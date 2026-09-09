@@ -14,7 +14,7 @@ import Tienda from "./pages/Tienda";
 import Contacto from "./pages/Contacto";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import VinoFinoDeMesaPage from "./pages/collections/VinoFinoDeMesa";
+import CriollasPage from "./pages/CriollasPage";
 import AdminPage from "./pages/AdminPage";
 import CatalogLoader from "./components/CatalogLoader";
 import { SessionContextProvider } from "./contexts/SessionContext";
@@ -34,7 +34,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/vinos" element={<Vinos />} />
-            <Route path="/vinos/vino-fino-de-mesa" element={<VinoFinoDeMesaPage />} />
+            <Route path="/criollas" element={<CriollasPage />} />
             <Route path="/historia" element={<Historia />} />
             <Route path="/lugar" element={<Lugar />} />
             <Route path="/tienda" element={<Tienda />} />

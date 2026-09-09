@@ -7,7 +7,7 @@ import { Menu } from "lucide-react";
 const Header = () => {
   const navLinks = [
     { href: "/historia", label: "Historia" },
-    { href: "/vinos/vino-fino-de-mesa", label: "Criollas" },
+    { href: "/criollas", label: "Criollas" },
     { href: "/lugar", label: "Lugar" },
     { href: "/tienda", label: "Tienda" },
     { href: "/contacto", label: "Contacto" },
