@@ -90,7 +90,7 @@ const CriollasPage = () => {
 
         {/* Nuestra Búsqueda */}
         <section className="py-20 md:py-32 border-t">
-            <StoryBlock image="/images/story/01.jpg" title="Nuestra Búsqueda">
+            <StoryBlock image="/images/story/raiz.jpg" title="Nuestra Búsqueda">
                 <p>Suspiro del Viento nació con la intención de volver a mirar estas variedades. En los viñedos del Valle de Uco encontramos plantas, historias y expresiones que durante mucho tiempo permanecieron fuera del centro de la vitivinicultura argentina.</p>
                 <p>Nuestro trabajo busca conocerlas, interpretarlas y darles un nuevo lugar. No buscamos reproducir el pasado. Buscamos descubrir qué pueden decir estas variedades hoy.</p>
             </StoryBlock>
