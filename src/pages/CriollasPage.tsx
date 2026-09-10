@@ -1,7 +1,6 @@
 import AnimatedImage from "@/components/AnimatedImage";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import GenealogyTree from "@/components/GenealogyTree";
 
 const StoryBlock = ({ image, title, children, imageLeft = false }) => (
   <div className={`grid md:grid-cols-2 gap-12 items-center py-12 md:py-20`}>
@@ -50,7 +49,7 @@ const CriollasPage = () => {
 
         {/* Origen Section */}
         <section className="py-20 md:py-32">
-            <StoryBlock image="/images/story/02.jpg" title="Un Encuentro que Cambió Nuestra Viticultura" imageLeft>
+            <StoryBlock image="/images/story/genealogia.jpg" title="Un Encuentro que Cambió Nuestra Viticultura" imageLeft>
                 <p>El origen de las criollas es la historia de un encuentro. Por un lado, las cepas europeas que llegaron a América, principalmente <strong>Listán Prieto</strong> y <strong>Moscatel de Alejandría</strong>. Por otro, un nuevo continente, un nuevo clima y un nuevo suelo.</p>
                 <p>A lo largo de los siglos, a través de cruces naturales y espontáneos, estas vides ancestrales dieron lugar a una nueva familia de variedades. Uvas que son, en esencia, el resultado de la adaptación y el mestizaje. Son, en el sentido más profundo, uvas de aquí.</p>
             </StoryBlock>
@@ -61,7 +60,7 @@ const CriollasPage = () => {
             <h2 className="font-serif text-4xl font-bold">El Árbol de Nuestras Criollas</h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Detrás de cada variedad hay una historia. Un árbol genealógico construido durante siglos de viajes, cruces, adaptación y territorio.</p>
             <div className="mt-12">
-              <GenealogyTree />
+              <AnimatedImage src="/images/story/arbol.jpg" alt="Árbol de nuestras criollas" className="w-full h-auto max-w-4xl mx-auto" />
             </div>
         </section>
 
