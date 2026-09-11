@@ -71,7 +71,7 @@ const CriollasPage = () => {
         {/* Las Grandes Criollas */}
         <section className="py-20 md:py-32 border-t">
             <h2 className="text-center font-serif text-4xl font-bold mb-12">Las Variedades que Marcaron Nuestra Historia</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="flex flex-col items-center gap-12 max-w-5xl mx-auto">
                 <AnimatedImage src="/images/story/px.jpg" alt="Pedro Giménez" className="w-full h-auto rounded-lg shadow-lg" />
                 <AnimatedImage src="/images/story/torro.jpg" alt="Torrontés Riojano" className="w-full h-auto rounded-lg shadow-lg" />
                 <AnimatedImage src="/images/story/cg.jpg" alt="Criolla Grande" className="w-full h-auto rounded-lg shadow-lg" />
