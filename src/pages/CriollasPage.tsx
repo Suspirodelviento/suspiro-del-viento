@@ -48,11 +48,15 @@ const CriollasPage = () => {
         </section>
 
         {/* Origen Section */}
-        <section className="py-20 md:py-32">
-            <StoryBlock image="/images/story/genealogia.jpg" title="Un Encuentro que Cambió Nuestra Viticultura" imageLeft>
+        <section className="py-20 md:py-32 text-center">
+            <h2 className="font-serif text-4xl font-bold">Un Encuentro que Cambió Nuestra Viticultura</h2>
+            <div className="mt-12">
+              <AnimatedImage src="/images/story/genealogia.jpg" alt="Un Encuentro que Cambió Nuestra Viticultura" className="w-full h-auto max-w-4xl mx-auto" />
+            </div>
+            <div className="space-y-4 text-lg text-muted-foreground max-w-3xl mx-auto mt-8 text-left">
                 <p>El origen de las criollas es la historia de un encuentro. Por un lado, las cepas europeas que llegaron a América, principalmente <strong>Listán Prieto</strong> y <strong>Moscatel de Alejandría</strong>. Por otro, un nuevo continente, un nuevo clima y un nuevo suelo.</p>
                 <p>A lo largo de los siglos, a través de cruces naturales y espontáneos, estas vides ancestrales dieron lugar a una nueva familia de variedades. Uvas que son, en esencia, el resultado de la adaptación y el mestizaje. Son, en el sentido más profundo, uvas de aquí.</p>
-            </StoryBlock>
+            </div>
         </section>
 
         {/* Árbol Genealógico */}
@@ -68,10 +72,10 @@ const CriollasPage = () => {
         <section className="py-20 md:py-32 border-t">
             <h2 className="text-center font-serif text-4xl font-bold mb-12">Las Variedades que Marcaron Nuestra Historia</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="text-center"><h3 className="font-serif text-2xl">Pedro Giménez</h3><p className="text-muted-foreground">Una de las blancas más importantes, hoy en retroceso.</p></div>
-                <div className="text-center"><h3 className="font-serif text-2xl">Torrontés Riojano</h3><p className="text-muted-foreground">La insignia blanca de Argentina.</p></div>
-                <div className="text-center"><h3 className="font-serif text-2xl">Criolla Grande</h3><p className="text-muted-foreground">Protagonista histórica del viñedo argentino.</p></div>
-                <div className="text-center"><h3 className="font-serif text-2xl">Cereza</h3><p className="text-muted-foreground">De gran presencia en la superficie nacional.</p></div>
+                <AnimatedImage src="/images/story/px.jpg" alt="Pedro Giménez" className="w-full h-auto rounded-lg shadow-lg" />
+                <AnimatedImage src="/images/story/torro.jpg" alt="Torrontés Riojano" className="w-full h-auto rounded-lg shadow-lg" />
+                <AnimatedImage src="/images/story/cg.jpg" alt="Criolla Grande" className="w-full h-auto rounded-lg shadow-lg" />
+                <AnimatedImage src="/images/story/cereza.jpg" alt="Cereza" className="w-full h-auto rounded-lg shadow-lg" />
             </div>
         </section>
 
