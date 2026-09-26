@@ -13,9 +13,9 @@ interface ShippingZone {
 }
 
 const ZONES: Record<string, ShippingZone> = {
-  VALLE_DE_UCO: { zone: "Valle de Uco", cost: 0, timeEstimate: "24-48hs" },
-  GRAN_MENDOZA: { zone: "Gran Mendoza", cost: 6000, timeEstimate: "48-72hs" },
-  RESTO_MENDOZA: { zone: "Resto de Mendoza", cost: 10000, timeEstimate: "3-5 días" },
+  VALLE_DE_UCO: { zone: "Valle de Uco", cost: 0, timeEstimate: "24-48hs", minBottles: 6 },
+  GRAN_MENDOZA: { zone: "Gran Mendoza", cost: 6000, timeEstimate: "48-72hs", minBottles: 6 },
+  RESTO_MENDOZA: { zone: "Resto de Mendoza", cost: 10000, timeEstimate: "3-5 días", minBottles: 6 },
   RESTO_ARGENTINA: { zone: "Resto de Argentina", cost: 20000, timeEstimate: "5-10 días", minBottles: 6 },
 };
 

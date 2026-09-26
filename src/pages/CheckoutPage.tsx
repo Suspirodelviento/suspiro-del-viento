@@ -14,13 +14,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
-  name: z.string().trim().min(2, "Nombre muy corto").max(120),
-  email: z.string().trim().email("Email inválido").max(180),
-  phone: z.string().trim().min(8, "Teléfono inválido").max(40),
-  address: z.string().trim().min(5, "Dirección muy corta").max(240),
-  city: z.string().trim().min(2, "Ciudad inválida").max(100),
-  province: z.string().trim().min(2, "Provincia inválida").max(100),
-  zip: z.string().trim().min(3, "Código postal inválido").max(20),
+  customer_name: z.string().trim().min(2, "Ingresá tu nombre completo").max(120, "El nombre es demasiado largo"),
+  customer_email: z.string().trim().email("Ingresá un email válido").max(180, "El email es demasiado largo"),
+  customer_phone: z.string().trim().min(8, "Ingresá un teléfono válido").max(40, "El teléfono es demasiado largo"),
+  shipping_address: z.string().trim().min(5, "Ingresá la dirección de entrega").max(240, "La dirección es demasiado larga"),
+  city: z.string().trim().min(2, "Ingresá la ciudad").max(100, "La ciudad es demasiado larga"),
+  province: z.string().trim().min(2, "Ingresá la provincia").max(100, "La provincia es demasiado larga"),
+  postal_code: z.string().trim().min(3, "Ingresá el código postal").max(20, "El código postal es demasiado largo"),
 });
 
 interface ShippingInfo {
@@ -29,6 +29,8 @@ interface ShippingInfo {
   timeEstimate: string;
   minBottles?: number;
 }
+
+const IDEMPOTENCY_STORAGE_KEY = "suspiro-checkout-attempt";
 
 const transferData = {
   bank: "Santander",
@@ -45,9 +47,17 @@ const CheckoutPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [confirmedTotal, setConfirmedTotal] = useState<number | null>(null);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo | null>(null);
   const [shippingError, setShippingError] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState("transfer");
+  const [idempotencyKey] = useState(() => {
+    const storedKey = window.sessionStorage.getItem(IDEMPOTENCY_STORAGE_KEY);
+    if (storedKey) return storedKey;
+    const newKey = crypto.randomUUID();
+    window.sessionStorage.setItem(IDEMPOTENCY_STORAGE_KEY, newKey);
+    return newKey;
+  });
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity * (item.isBox ? 6 : 1), 0);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity * (item.isBox ? 6 * 0.9 : 1), 0);
@@ -55,7 +65,15 @@ const CheckoutPage = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "", city: "", province: "Mendoza", zip: "" },
+    defaultValues: {
+      customer_name: "",
+      customer_email: "",
+      customer_phone: "",
+      shipping_address: "",
+      city: "",
+      province: "Mendoza",
+      postal_code: "",
+    },
   });
 
   const cityValue = form.watch("city");
@@ -82,40 +100,45 @@ const CheckoutPage = () => {
   }, [debouncedCity, debouncedProvince]);
 
   const shippingValidation = useMemo(() => {
-    if (!shippingInfo) return "Ingrese una ciudad y provincia para calcular el envío.";
-    if (shippingInfo.minBottles && totalItems < shippingInfo.minBottles) {
-      return `Para envíos a ${shippingInfo.zone}, la compra mínima es de ${shippingInfo.minBottles} botellas.`;
-    }
+    if (cart.length === 0) return "Tu carrito está vacío.";
+    if (totalItems < 6) return "La compra mínima es de 6 botellas.";
+    if (!shippingInfo) return "Ingresá una ciudad y provincia para calcular el envío.";
     return null;
-  }, [shippingInfo, totalItems]);
+  }, [cart.length, shippingInfo, totalItems]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (shippingValidation) {
       setSubmitError(shippingValidation);
       return;
     }
+
     setSubmitting(true);
     setSubmitError(null);
 
-    const { data, error } = await supabase.functions.invoke("create-order", {
-      body: {
-        ...values,
-        items: cart.map(item => ({ product_id: item.id, quantity: item.quantity, is_box: item.isBox })),
-        payment_method: paymentMethod,
-        shipping_zone: shippingInfo?.zone,
-        shipping_cost: shippingInfo?.cost,
-        shipping_time_estimate: shippingInfo?.timeEstimate,
-      },
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke("create-order", {
+        body: {
+          ...values,
+          items: cart.map((item) => ({ product_id: item.id, quantity: item.quantity, is_box: item.isBox })),
+          payment_method: paymentMethod,
+          idempotency_key: idempotencyKey,
+        },
+      });
 
-    setSubmitting(false);
-    if (error || !data?.order_id) {
-      setSubmitError(error?.message || "No pudimos registrar el pedido. Intente nuevamente.");
-      return;
+      if (error || !data?.order_id) {
+        setSubmitError(data?.error || error?.message || "No pudimos registrar el pedido. Intentá nuevamente.");
+        return;
+      }
+
+      setOrderId(data.order_id);
+      setConfirmedTotal(Number(data.total));
+      window.sessionStorage.removeItem(IDEMPOTENCY_STORAGE_KEY);
+      clearCart();
+    } catch {
+      setSubmitError("No pudimos registrar el pedido. Revisá tu conexión e intentá nuevamente.");
+    } finally {
+      setSubmitting(false);
     }
-
-    setOrderId(data.order_id);
-    clearCart();
   };
 
   if (orderId) {
@@ -130,7 +153,7 @@ const CheckoutPage = () => {
             <p><strong>Alias:</strong> {transferData.alias}</p>
             <p><strong>CBU:</strong> {transferData.cbu}</p>
             <p><strong>Titular:</strong> {transferData.holder}</p>
-            <p><strong>Total a transferir:</strong> ${total.toLocaleString("es-AR")}</p>
+            <p><strong>Total a transferir:</strong> ${(confirmedTotal ?? total).toLocaleString("es-AR")}</p>
           </div>
           <p className="mt-6 text-xs text-muted-foreground">Nro de Pedido: {orderId.substring(0, 8)}</p>
           <Button asChild className="mt-9 rounded-full px-8"><Link to="/tienda">Volver a la tienda</Link></Button>
@@ -142,16 +165,117 @@ const CheckoutPage = () => {
   return (
     <div className="container mx-auto px-4 py-20 md:py-32">
       <h1 className="text-center font-serif text-4xl font-bold md:text-5xl">Finalizar compra</h1>
-      <div className="mx-auto mt-12 grid max-w-6xl gap-16 md:grid-cols-2">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-10 md:grid-cols-2 md:gap-16">
         <div>
           <h2 className="mb-6 font-serif text-2xl font-bold">1. Datos de envío</h2>
-          <Form {...form}>{/* ... (formulario) */}</Form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-5 sm:grid-cols-2" noValidate>
+              <FormField
+                control={form.control}
+                name="customer_name"
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-2">
+                    <FormLabel>Nombre y apellido</FormLabel>
+                    <FormControl><Input autoComplete="name" placeholder="Tu nombre completo" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="customer_email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl><Input type="email" autoComplete="email" placeholder="nombre@ejemplo.com" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="customer_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Teléfono</FormLabel>
+                    <FormControl><Input type="tel" autoComplete="tel" placeholder="261 555 0000" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="shipping_address"
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-2">
+                    <FormLabel>Dirección de entrega</FormLabel>
+                    <FormControl><Input autoComplete="street-address" placeholder="Calle, número, piso o referencia" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ciudad</FormLabel>
+                    <FormControl><Input autoComplete="address-level2" placeholder="Ciudad" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="province"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Provincia</FormLabel>
+                    <FormControl><Input autoComplete="address-level1" placeholder="Provincia" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="postal_code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Código postal</FormLabel>
+                    <FormControl><Input autoComplete="postal-code" placeholder="Código postal" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <button type="submit" className="hidden" aria-hidden="true" />
+            </form>
+          </Form>
         </div>
         <div>
-          <h2 className="mb-6 font-serif text-2xl font-bold">2. Resumen y Pago</h2>
-          {/* ... (resumen del pedido) */}
+          <h2 className="mb-6 font-serif text-2xl font-bold">2. Resumen y pago</h2>
+          <div className="rounded-[1.5rem] border border-border/70 bg-card p-5 sm:p-6">
+            <div className="space-y-4">
+              {cart.map((item) => (
+                <div key={`${item.id}-${item.isBox ? "box" : "bottle"}`} className="flex items-start justify-between gap-4 text-sm">
+                  <div>
+                    <p className="font-medium text-foreground">{item.name}</p>
+                    <p className="mt-1 text-muted-foreground">{item.quantity} × {item.isBox ? "caja de 6" : "botella"}</p>
+                  </div>
+                  <p className="shrink-0 font-medium">${(item.price * item.quantity * (item.isBox ? 6 * 0.9 : 1)).toLocaleString("es-AR")}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 space-y-3 border-t border-border/70 pt-5 text-sm">
+              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${subtotal.toLocaleString("es-AR")}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Envío</span><span>{shippingInfo ? (shippingInfo.cost === 0 ? "Gratis" : `$${shippingInfo.cost.toLocaleString("es-AR")}`) : "A calcular"}</span></div>
+              {shippingInfo && <div className="flex justify-between gap-4 text-xs text-muted-foreground"><span>{shippingInfo.zone}</span><span>{shippingInfo.timeEstimate}</span></div>}
+              {shippingError && <p role="alert" className="text-destructive">{shippingError}</p>}
+              <div className="flex justify-between border-t border-border/70 pt-4 text-lg font-semibold"><span>Total estimado</span><span>${total.toLocaleString("es-AR")}</span></div>
+              <p className="text-xs leading-5 text-muted-foreground">El importe definitivo se valida y calcula nuevamente en el servidor.</p>
+            </div>
+          </div>
           <div className="mt-8">
-            <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Método de Pago</h3>
+            <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Método de pago</h3>
             <RadioGroup defaultValue="transfer" onValueChange={setPaymentMethod} className="mt-4">
               <div className="flex items-center space-x-2 rounded-lg border p-4">
                 <RadioGroupItem value="transfer" id="transfer" />
@@ -168,9 +292,10 @@ const CheckoutPage = () => {
             </div>
           )}
           <div className="mt-8">
-            {submitError && <p role="alert" className="text-sm text-destructive mb-4">{submitError}</p>}
-            <Button onClick={form.handleSubmit(onSubmit)} disabled={submitting || !!shippingValidation} className="w-full rounded-full">
-              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</> : "Confirmar Pedido"}
+            {shippingValidation && <p className="mb-4 text-sm text-muted-foreground">{shippingValidation}</p>}
+            {submitError && <p role="alert" className="mb-4 text-sm text-destructive">{submitError}</p>}
+            <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={submitting || !!shippingValidation} className="w-full rounded-full">
+              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</> : "Confirmar pedido"}
             </Button>
           </div>
         </div>
