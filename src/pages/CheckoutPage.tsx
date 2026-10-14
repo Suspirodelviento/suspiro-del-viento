@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +31,7 @@ interface ShippingInfo {
 }
 
 const IDEMPOTENCY_STORAGE_KEY = "suspiro-checkout-attempt";
+const MP_ACTIVE_STORAGE_KEY = "suspiro-mp-active";
 
 const transferData = {
   bank: "Santander",
@@ -47,10 +48,16 @@ const CheckoutPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [mpPendingOrder, setMpPendingOrder] = useState<string | null>(() => {
+    const active = window.sessionStorage.getItem(MP_ACTIVE_STORAGE_KEY);
+    return active && active !== "pending" ? active : null;
+  });
+  const [mpAttemptLocked, setMpAttemptLocked] = useState(() => !!window.sessionStorage.getItem(MP_ACTIVE_STORAGE_KEY));
+  const submittingRef = useRef(false);
   const [confirmedTotal, setConfirmedTotal] = useState<number | null>(null);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo | null>(null);
   const [shippingError, setShippingError] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState("transfer");
+  const [paymentMethod, setPaymentMethod] = useState(() => window.sessionStorage.getItem(MP_ACTIVE_STORAGE_KEY) ? "mercadopago" : "transfer");
   const [idempotencyKey] = useState(() => {
     const storedKey = window.sessionStorage.getItem(IDEMPOTENCY_STORAGE_KEY);
     if (storedKey) return storedKey;
@@ -107,13 +114,19 @@ const CheckoutPage = () => {
   }, [cart.length, shippingInfo, totalItems]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (submittingRef.current || mpPendingOrder) return;
     if (shippingValidation) {
       setSubmitError(shippingValidation);
       return;
     }
 
+    submittingRef.current = true;
     setSubmitting(true);
     setSubmitError(null);
+    if (paymentMethod === "mercadopago") {
+      setMpAttemptLocked(true);
+      window.sessionStorage.setItem(MP_ACTIVE_STORAGE_KEY, "pending");
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("create-order", {
@@ -121,12 +134,33 @@ const CheckoutPage = () => {
           ...values,
           items: cart.map((item) => ({ product_id: item.id, quantity: item.quantity, is_box: item.isBox })),
           payment_method: paymentMethod,
-          idempotency_key: idempotencyKey,
+          idempotency_key: paymentMethod === "mercadopago" ? `${idempotencyKey}:mp` : idempotencyKey,
         },
       });
 
       if (error || !data?.order_id) {
-        setSubmitError(data?.error || error?.message || "No pudimos registrar el pedido. Intentá nuevamente.");
+        const details = error?.context instanceof Response ? await error.context.clone().json().catch(() => null) : null;
+        if (paymentMethod === "mercadopago" && details?.order_id) {
+          setMpPendingOrder(details.order_id);
+          window.sessionStorage.setItem(MP_ACTIVE_STORAGE_KEY, details.order_id);
+          window.sessionStorage.setItem(`suspiro-mp-${details.order_id}`, JSON.stringify({ key: `${idempotencyKey}:mp`, cart: JSON.stringify(cart.map((item) => [item.id, item.quantity, item.isBox])) }));
+        } else if (paymentMethod === "mercadopago" && details?.error) {
+          setMpAttemptLocked(false);
+          window.sessionStorage.removeItem(MP_ACTIVE_STORAGE_KEY);
+        }
+        setSubmitError(details?.error || data?.error || error?.message || "No pudimos registrar el pedido. Intentá nuevamente.");
+        return;
+      }
+
+      if (paymentMethod === "mercadopago") {
+        const checkout = new URL(data.checkout_url);
+        if (checkout.protocol !== "https:" || checkout.hostname !== "sandbox.mercadopago.com.ar") throw new Error("Checkout inválido");
+        window.sessionStorage.setItem(`suspiro-mp-${data.order_id}`, JSON.stringify({
+          key: `${idempotencyKey}:mp`,
+          cart: JSON.stringify(cart.map((item) => [item.id, item.quantity, item.isBox])),
+        }));
+        window.sessionStorage.setItem(MP_ACTIVE_STORAGE_KEY, data.order_id);
+        window.location.assign(checkout.href);
         return;
       }
 
@@ -135,8 +169,9 @@ const CheckoutPage = () => {
       window.sessionStorage.removeItem(IDEMPOTENCY_STORAGE_KEY);
       clearCart();
     } catch {
-      setSubmitError("No pudimos registrar el pedido. Revisá tu conexión e intentá nuevamente.");
+      setSubmitError(paymentMethod === "mercadopago" ? "No pudimos confirmar el inicio del pago. Para evitar duplicados, reintentá con este mismo formulario o consultanos." : "No pudimos registrar el pedido. Revisá tu conexión e intentá nuevamente.");
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };
@@ -276,12 +311,17 @@ const CheckoutPage = () => {
           </div>
           <div className="mt-8">
             <h3 className="font-sans uppercase tracking-widest text-sm text-foreground">Método de pago</h3>
-            <RadioGroup defaultValue="transfer" onValueChange={setPaymentMethod} className="mt-4">
+            <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} disabled={submitting || mpAttemptLocked || !!mpPendingOrder} className="mt-4">
               <div className="flex items-center space-x-2 rounded-lg border p-4">
                 <RadioGroupItem value="transfer" id="transfer" />
                 <Label htmlFor="transfer" className="flex-1 cursor-pointer">Transferencia Bancaria</Label>
               </div>
+              <div className="flex items-center space-x-2 rounded-lg border p-4">
+                <RadioGroupItem value="mercadopago" id="mercadopago" />
+                <Label htmlFor="mercadopago" className="flex-1 cursor-pointer">Mercado Pago <span className="text-xs text-muted-foreground">— modo de prueba</span></Label>
+              </div>
             </RadioGroup>
+            {paymentMethod === "mercadopago" && <p className="mt-4 text-sm leading-6 text-muted-foreground">Te llevaremos al checkout de prueba de Mercado Pago. El pedido solo se confirma cuando el servidor verifica el pago.</p>}
           </div>
           {paymentMethod === 'transfer' && (
             <div className="mt-4 text-sm bg-secondary/30 p-4 rounded-lg">
@@ -294,8 +334,9 @@ const CheckoutPage = () => {
           <div className="mt-8">
             {shippingValidation && <p className="mb-4 text-sm text-muted-foreground">{shippingValidation}</p>}
             {submitError && <p role="alert" className="mb-4 text-sm text-destructive">{submitError}</p>}
-            <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={submitting || !!shippingValidation} className="w-full rounded-full">
-              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</> : "Confirmar pedido"}
+            {mpPendingOrder && <Button asChild variant="outline" className="mb-4 w-full rounded-full"><Link to={`/checkout/mercadopago?order_id=${mpPendingOrder}`}>Consultar pedido #{mpPendingOrder.substring(0, 8)}</Link></Button>}
+            <Button type="button" onClick={form.handleSubmit(onSubmit)} disabled={submitting || !!shippingValidation || !!mpPendingOrder} className="w-full rounded-full">
+              {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</> : paymentMethod === "mercadopago" ? "Ir a Mercado Pago (prueba)" : "Confirmar pedido"}
             </Button>
           </div>
         </div>

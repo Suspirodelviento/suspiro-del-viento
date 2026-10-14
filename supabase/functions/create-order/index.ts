@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.8";
+import { createMpCheckout, mpConfig } from "../_shared/mercadopago.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,6 +44,7 @@ serve(async (req) => {
     });
   }
 
+  let createdOrderId: string | undefined;
   try {
     const body = await req.json();
     const {
@@ -65,8 +67,12 @@ serve(async (req) => {
     if (!isRequiredText(city, 2, 100)) throw new Error("Ingresá una ciudad válida.");
     if (!isRequiredText(province, 2, 100)) throw new Error("Ingresá una provincia válida.");
     if (!isRequiredText(postal_code, 3, 20)) throw new Error("Ingresá un código postal válido.");
-    if (payment_method !== "transfer") throw new Error("El método de pago seleccionado no está disponible.");
+    if (!["transfer", "mercadopago"].includes(payment_method)) throw new Error("El método de pago seleccionado no está disponible.");
     if (!isRequiredText(idempotency_key, 20, 200)) throw new Error("No pudimos identificar este intento de compra.");
+    if (payment_method === "mercadopago") {
+      if (!/^[0-9a-f-]{36}:mp$/i.test(idempotency_key)) throw new Error("Intento de pago inválido.");
+      mpConfig();
+    }
     if (!Array.isArray(items) || items.length === 0 || items.length > 100 || !items.every(isOrderItem)) {
       throw new Error("El carrito contiene productos o cantidades inválidas.");
     }
@@ -93,15 +99,17 @@ serve(async (req) => {
     });
 
     if (orderError) throw orderError;
+    createdOrderId = orderId;
 
     const { data: order, error: readError } = await supabase
       .from("orders")
-      .select("id, total, status, shipping_zone, shipping_cost, shipping_time_estimate")
+      .select("id, total, status, shipping_zone, shipping_cost, shipping_time_estimate, payment_method, mp_checkout_url, mp_checkout_state")
       .eq("id", orderId)
       .single();
 
     if (readError || !order) throw readError ?? new Error("No se pudo recuperar el pedido creado.");
 
+    const checkoutUrl = payment_method === "mercadopago" ? await createMpCheckout(supabase, order) : undefined;
     console.info("[create-order] Pedido creado o recuperado de forma idempotente", { orderId: order.id });
 
     return new Response(JSON.stringify({
@@ -111,6 +119,7 @@ serve(async (req) => {
       shipping_zone: order.shipping_zone,
       shipping_cost: Number(order.shipping_cost),
       shipping_time_estimate: order.shipping_time_estimate,
+      checkout_url: checkoutUrl,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 201,
@@ -118,7 +127,7 @@ serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "No pudimos registrar el pedido.";
     console.error("[create-order] No se pudo procesar el pedido", { message });
-    return new Response(JSON.stringify({ error: message }), {
+    return new Response(JSON.stringify({ error: message, order_id: createdOrderId }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
     });

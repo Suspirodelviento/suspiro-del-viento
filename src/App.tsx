@@ -14,6 +14,7 @@ import Tienda from "./pages/Tienda";
 import Contacto from "./pages/Contacto";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import MercadoPagoReturnPage from "./pages/MercadoPagoReturnPage";
 import CriollasPage from "./pages/CriollasPage";
 import AdminPage from "./pages/AdminPage";
 import CatalogLoader from "./components/CatalogLoader";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/tienda" element={<Tienda />} />
             <Route path="/producto/:slug" element={<ProductPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout/mercadopago" element={<MercadoPagoReturnPage />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
