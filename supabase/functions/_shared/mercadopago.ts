@@ -1,16 +1,42 @@
 import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.49.8";
+import { validateMpTestSettings, validateMpTestIdentity } from "./mp-test-identity.ts";
 
-export function mpConfig() {
-  const token = Deno.env.get("MP_ACCESS_TOKEN");
+function mpSettings() {
+  const settings = validateMpTestSettings(Deno.env.get("MP_ACCESS_TOKEN"), Deno.env.get("MP_ENVIRONMENT"), Deno.env.get("MP_TEST_SELLER_ID"));
   const secret = Deno.env.get("MP_WEBHOOK_SECRET");
   const site = Deno.env.get("PUBLIC_SITE_URL");
-  if (!token?.startsWith("TEST-")) throw new Error("Mercado Pago requiere credenciales TEST. No se permiten pagos de producción.");
-  if (!secret || !site) throw new Error("Falta configurar MP_WEBHOOK_SECRET o PUBLIC_SITE_URL para Mercado Pago. Podés elegir transferencia bancaria.");
-  const url = new URL(site);
+  if (!secret || secret !== secret.trim() || !site) throw new Error("Falta configurar MP_WEBHOOK_SECRET o PUBLIC_SITE_URL para Mercado Pago. Podés elegir transferencia bancaria.");
+  let url: URL;
+  try { url = new URL(site); } catch { throw new Error("PUBLIC_SITE_URL debe ser el origen HTTPS verificado de la tienda."); }
   if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || url.pathname !== "/") {
     throw new Error("PUBLIC_SITE_URL debe ser el origen HTTPS verificado de la tienda.");
   }
-  return { token, secret, site: url.origin };
+  return { ...settings, secret, site: url.origin };
+}
+
+export function mpWebhookSecret() {
+  return mpSettings().secret;
+}
+
+export async function mpConfig() {
+  const settings = mpSettings();
+  let identity: unknown;
+  try {
+    const response = await fetch("https://api.mercadopago.com/users/me", {
+      method: "GET",
+      headers: { Authorization: `Bearer ${settings.token}` },
+      redirect: "error",
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) throw new Error("Identity lookup failed");
+    identity = await response.json();
+  } catch {
+    // Never return provider bodies, credentials or transport errors to clients/logs.
+    throw new Error("No se pudo verificar el vendedor TEST con Mercado Pago. El pago permanece bloqueado; intentá nuevamente o revisá la configuración.");
+  }
+  validateMpTestIdentity(identity, settings.sellerId);
+  return settings;
 }
 
 async function mpResponse(response: Response) {
@@ -55,8 +81,8 @@ function testCheckoutUrl(value: unknown) {
   return url.href;
 }
 
-export async function createMpCheckout(db: SupabaseClient, order: MpLocalOrder) {
-  const { token, site } = mpConfig();
+export async function createMpCheckout(db: SupabaseClient, order: MpLocalOrder, verifiedConfig?: Awaited<ReturnType<typeof mpConfig>>) {
+  const { token, site, sellerId } = verifiedConfig ?? await mpConfig();
   if (order.payment_method !== "mercadopago") throw new Error("El pedido tiene otro método de pago.");
   if (!["pending", "pending_payment"].includes(order.status)) throw new Error("Este pedido ya fue confirmado o cancelado. Consultá su estado antes de pagar.");
   if (order.mp_checkout_url) return testCheckoutUrl(order.mp_checkout_url);
@@ -108,7 +134,7 @@ export async function createMpCheckout(db: SupabaseClient, order: MpLocalOrder) 
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(15000),
     }));
-    if (typeof remote.id !== "string" || !/^ORDTST[A-Z0-9]+$/.test(remote.id) || remote.live_mode === true || remote.type !== "online" || remote.processing_mode !== "manual" || remote.currency !== "ARS" || remote.country_code !== "ARG" || remote.external_reference !== order.id || Math.round(Number(remote.total_amount) * 100) !== Math.round(Number(order.total) * 100)) {
+    if (typeof remote.id !== "string" || !/^ORDTST[A-Z0-9]+$/.test(remote.id) || remote.live_mode === true || remote.type !== "online" || remote.processing_mode !== "manual" || remote.currency !== "ARS" || remote.country_code !== "ARG" || String(remote.user_id) !== sellerId || remote.external_reference !== order.id || Math.round(Number(remote.total_amount) * 100) !== Math.round(Number(order.total) * 100)) {
       throw new Error("Mercado Pago no devolvió una orden TEST válida que coincida con el pedido. No se habilitará el checkout.");
     }
     const checkoutUrl = testCheckoutUrl(remote.checkout_url);

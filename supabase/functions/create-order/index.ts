@@ -47,6 +47,14 @@ serve(async (req) => {
   let createdOrderId: string | undefined;
   try {
     const body = await req.json();
+    if (body.verification_only === true) {
+      if (body.payment_method !== "mercadopago") throw new Error("La verificación es exclusiva para Mercado Pago TEST.");
+      await mpConfig();
+      return new Response(JSON.stringify({ test_credentials_verified: true, environment: "test", country: "AR", purchase_performed: false }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Cache-Control": "no-store" },
+      });
+    }
+    let mpConfiguration: Awaited<ReturnType<typeof mpConfig>> | undefined;
     const {
       customer_name,
       customer_email,
@@ -71,7 +79,7 @@ serve(async (req) => {
     if (!isRequiredText(idempotency_key, 20, 200)) throw new Error("No pudimos identificar este intento de compra.");
     if (payment_method === "mercadopago") {
       if (!/^[0-9a-f-]{36}:mp$/i.test(idempotency_key)) throw new Error("Intento de pago inválido.");
-      mpConfig();
+      mpConfiguration = await mpConfig();
       if (!/^[^\s@]+@testuser[.]com$/i.test(customer_email.trim())) throw new Error("Para el checkout TEST usá el email de la cuenta compradora de prueba de Mercado Pago (@testuser.com).");
     }
     if (!Array.isArray(items) || items.length === 0 || items.length > 100 || !items.every(isOrderItem)) {
@@ -110,7 +118,7 @@ serve(async (req) => {
 
     if (readError || !order) throw readError ?? new Error("No se pudo recuperar el pedido creado.");
 
-    const checkoutUrl = payment_method === "mercadopago" ? await createMpCheckout(supabase, order) : undefined;
+    const checkoutUrl = payment_method === "mercadopago" ? await createMpCheckout(supabase, order, mpConfiguration) : undefined;
     console.info("[create-order] Pedido creado o recuperado de forma idempotente", { orderId: order.id });
 
     return new Response(JSON.stringify({
