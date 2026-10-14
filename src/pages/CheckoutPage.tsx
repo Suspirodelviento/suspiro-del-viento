@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useDebounce } from "@/hooks/use-debounce";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { mercadoPagoCheckoutUrl } from "@/lib/mercadopago";
 
 const formSchema = z.object({
   customer_name: z.string().trim().min(2, "Ingresá tu nombre completo").max(120, "El nombre es demasiado largo"),
@@ -153,14 +154,14 @@ const CheckoutPage = () => {
       }
 
       if (paymentMethod === "mercadopago") {
-        const checkout = new URL(data.checkout_url);
-        if (checkout.protocol !== "https:" || checkout.hostname !== "sandbox.mercadopago.com.ar") throw new Error("Checkout inválido");
+        const checkoutUrl = mercadoPagoCheckoutUrl(data.checkout_url);
+        if (!checkoutUrl) throw new Error("Checkout inválido");
         window.sessionStorage.setItem(`suspiro-mp-${data.order_id}`, JSON.stringify({
           key: `${idempotencyKey}:mp`,
           cart: JSON.stringify(cart.map((item) => [item.id, item.quantity, item.isBox])),
         }));
         window.sessionStorage.setItem(MP_ACTIVE_STORAGE_KEY, data.order_id);
-        window.location.assign(checkout.href);
+        window.location.assign(checkoutUrl);
         return;
       }
 
@@ -321,7 +322,7 @@ const CheckoutPage = () => {
                 <Label htmlFor="mercadopago" className="flex-1 cursor-pointer">Mercado Pago <span className="text-xs text-muted-foreground">— modo de prueba</span></Label>
               </div>
             </RadioGroup>
-            {paymentMethod === "mercadopago" && <p className="mt-4 text-sm leading-6 text-muted-foreground">Te llevaremos al checkout de prueba de Mercado Pago. El pedido solo se confirma cuando el servidor verifica el pago.</p>}
+            {paymentMethod === "mercadopago" && <p className="mt-4 text-sm leading-6 text-muted-foreground">Te llevaremos al checkout TEST de Mercado Pago. Usá el email de tu cuenta compradora de prueba (@testuser.com) y una tarjeta de prueba. El pedido solo se confirma cuando el servidor verifica el pago.</p>}
           </div>
           {paymentMethod === 'transfer' && (
             <div className="mt-4 text-sm bg-secondary/30 p-4 rounded-lg">

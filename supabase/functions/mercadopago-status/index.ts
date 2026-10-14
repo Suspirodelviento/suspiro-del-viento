@@ -12,10 +12,11 @@ serve(async (req) => {
     if (typeof order_id !== "string" || !/^[0-9a-f-]{36}$/i.test(order_id) || typeof idempotency_key !== "string" || !/^[0-9a-f-]{36}:mp$/i.test(idempotency_key)) return reply({ error: "Pedido no disponible" }, 404);
     // Guest access uses the high-entropy checkout attempt as a capability, never the browser's return status.
     const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
-    const { data, error } = await db.from("orders").select("id,total,status,mp_payment_status,mp_checkout_url,payment_confirmed_at,shipping_cost,shipping_zone,shipping_time_estimate,shipping_address,city,province,postal_code,order_items(product_name,quantity,subtotal)")
+    const { data, error } = await db.from("orders").select("id,total,status,mp_order_id,mp_order_status,mp_order_status_detail,mp_payment_status,mp_checkout_url,mp_checkout_state,mp_order_request,payment_confirmed_at,shipping_cost,shipping_zone,shipping_time_estimate,shipping_address,city,province,postal_code,order_items(product_name,quantity,subtotal)")
       .eq("id", order_id).eq("idempotency_key", idempotency_key).eq("payment_method", "mercadopago").single();
     if (error || !data) return reply({ error: "Pedido no disponible en esta sesión" }, 404);
-    return reply(data);
+    const { mp_order_request, ...details } = data;
+    return reply({ ...details, can_resume_checkout: !!mp_order_request && !data.mp_checkout_url && ["pending", "pending_payment"].includes(data.status) });
   } catch {
     console.error("[mercadopago-status] Failed to retrieve order status");
     return reply({ error: "No pudimos consultar el pedido" }, 503);

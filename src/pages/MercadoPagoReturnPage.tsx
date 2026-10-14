@@ -4,6 +4,7 @@ import { CheckCircle2, Clock3, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useWineStore } from "@/store/wineStore";
+import { mercadoPagoCheckoutUrl } from "@/lib/mercadopago";
 
 interface PaymentOrder {
   id: string;
@@ -11,6 +12,7 @@ interface PaymentOrder {
   total: number;
   mp_payment_status: string | null;
   mp_checkout_url: string | null;
+  can_resume_checkout: boolean;
   payment_confirmed_at: string | null;
   shipping_cost: number;
   shipping_zone: string;
@@ -26,7 +28,7 @@ const money = (value: number) => `$${Number(value).toLocaleString("es-AR")}`;
 
 export default function MercadoPagoReturnPage() {
   const [params] = useSearchParams();
-  const orderId = params.get("order_id") ?? "";
+  const orderId = params.get("local_order_id") ?? params.get("order_id") ?? "";
   const returnHint = params.get("result");
   const receipt = useMemo(() => {
     try {
@@ -37,6 +39,7 @@ export default function MercadoPagoReturnPage() {
   const [order, setOrder] = useState<PaymentOrder | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
+  const [retrying, setRetrying] = useState(false);
   const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function MercadoPagoReturnPage() {
       }
       setOrder(data);
       setError(null);
-      const confirmed = !!data.payment_confirmed_at && data.status !== "cancelled" && data.mp_payment_status === "approved";
+      const confirmed = !!data.payment_confirmed_at && data.status !== "cancelled" && ["approved", "partially_refunded"].includes(data.mp_payment_status);
       if (confirmed) {
         const state = useWineStore.getState();
         if (JSON.stringify(state.cart.map((item) => [item.id, item.quantity, item.isBox])) === receipt.cart) state.clearCart();
@@ -78,16 +81,32 @@ export default function MercadoPagoReturnPage() {
     return () => { cancelled = true; clearTimeout(timer); };
   }, [orderId, receipt, refresh]);
 
-  const confirmed = !!order?.payment_confirmed_at && order.status !== "cancelled" && order.mp_payment_status === "approved";
+  const confirmed = !!order?.payment_confirmed_at && order.status !== "cancelled" && ["approved", "partially_refunded"].includes(order.mp_payment_status ?? "");
+  const partialRefund = order?.mp_payment_status === "partially_refunded";
   const failed = order?.status === "cancelled" || ["rejected", "cancelled", "refunded", "charged_back"].includes(order?.mp_payment_status ?? "");
   const Icon = confirmed ? CheckCircle2 : failed ? AlertCircle : Clock3;
-  const title = confirmed ? "Pago confirmado" : failed ? "Pago no confirmado o cancelado" : "Pedido pendiente de pago";
-  const retryUrl = useMemo(() => {
+  const title = partialRefund ? "Pago con reintegro parcial" : confirmed ? "Pago confirmado" : failed ? "Pago no confirmado o cancelado" : "Pedido pendiente de pago";
+  const retryUrl = mercadoPagoCheckoutUrl(order?.mp_checkout_url);
+
+  const resumeCheckout = async () => {
+    if (!receipt || retrying) return;
+    setRetrying(true);
+    setError(null);
     try {
-      const url = new URL(order?.mp_checkout_url ?? "");
-      return url.protocol === "https:" && url.hostname === "sandbox.mercadopago.com.ar" ? url.href : null;
-    } catch { return null; }
-  }, [order?.mp_checkout_url]);
+      const { data, error: requestError } = await supabase.functions.invoke("mercadopago-resume", { body: { order_id: orderId, idempotency_key: receipt.key } });
+      if (requestError) {
+        const details = requestError.context instanceof Response ? await requestError.context.clone().json().catch(() => null) : null;
+        throw new Error(details?.error || "No pudimos reintentar el mismo pago. Consultanos antes de crear otra compra.");
+      }
+      const url = mercadoPagoCheckoutUrl(data?.checkout_url);
+      if (!url || data?.order_id !== orderId) throw new Error("No se recibió un checkout válido para este pedido.");
+      window.location.assign(url);
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : "No pudimos reintentar este pago.");
+    } finally {
+      setRetrying(false);
+    }
+  };
 
   return (
     <section className="min-h-[70vh] px-5 py-20">
@@ -95,7 +114,7 @@ export default function MercadoPagoReturnPage() {
         <Icon className="mx-auto h-11 w-11 text-primary" strokeWidth={1.4} />
         <h1 className="mt-4 font-serif text-4xl md:text-5xl">{title}</h1>
         <p className="mt-5 leading-7 text-muted-foreground">
-          {confirmed ? "El servidor verificó tu pago con Mercado Pago. Gracias por tu compra." : failed ? "No continuaremos con la preparación de un pedido sin pago confirmado. Si hubo un débito, consultanos antes de volver a pagar." : "Recibimos tu pedido. La confirmación depende de la notificación de Mercado Pago verificada por nuestro servidor."}
+          {partialRefund ? "Mercado Pago informó un reintegro parcial. Consultanos para conocer el ajuste del pedido; no vuelvas a pagar." : confirmed ? "El servidor verificó tu pago con Mercado Pago. Gracias por tu compra." : failed ? "No continuaremos con la preparación de un pedido sin pago confirmado. Si hubo un débito, consultanos antes de volver a pagar." : "Recibimos tu pedido. La confirmación depende de la notificación de Mercado Pago verificada por nuestro servidor."}
         </p>
         {!confirmed && !failed && returnHint === "failure" && <p className="mt-3 text-sm text-muted-foreground">Volviste desde un pago interrumpido o rechazado. Estamos consultando el estado real; no se confirma por la redirección.</p>}
         <p className="mt-5 text-sm">Nro. de pedido: {orderId.substring(0, 8) || "No disponible"}</p>
@@ -114,8 +133,9 @@ export default function MercadoPagoReturnPage() {
           </div>
         )}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          {!confirmed && receipt && <Button onClick={() => setRefresh((value) => value + 1)} disabled={checking} variant="outline" className="rounded-full">Actualizar estado</Button>}
-          {!confirmed && order?.status !== "cancelled" && [null, "rejected", "cancelled"].includes(order?.mp_payment_status ?? null) && retryUrl && <Button asChild className="rounded-full"><a href={retryUrl}>Continuar el mismo pago de prueba</a></Button>}
+          {!confirmed && receipt && <Button onClick={() => setRefresh((value) => value + 1)} disabled={checking || retrying} variant="outline" className="rounded-full">Actualizar estado</Button>}
+          {!confirmed && receipt && order?.can_resume_checkout && <Button onClick={resumeCheckout} disabled={checking || retrying} className="rounded-full">{retrying ? "Reintentando el mismo pedido..." : "Reintentar inicio del mismo pago TEST"}</Button>}
+          {!confirmed && order?.status !== "cancelled" && [null, "pending", "rejected", "cancelled"].includes(order?.mp_payment_status ?? null) && retryUrl && <Button asChild className="rounded-full"><a href={retryUrl}>Continuar el mismo pago de prueba</a></Button>}
           <Button asChild variant="outline" className="rounded-full"><Link to="/tienda">Volver a la tienda</Link></Button>
           <Button asChild variant="outline" className="rounded-full"><Link to="/contacto">Consultar por mi pedido</Link></Button>
         </div>

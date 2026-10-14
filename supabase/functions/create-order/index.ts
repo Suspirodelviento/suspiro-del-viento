@@ -72,6 +72,7 @@ serve(async (req) => {
     if (payment_method === "mercadopago") {
       if (!/^[0-9a-f-]{36}:mp$/i.test(idempotency_key)) throw new Error("Intento de pago inválido.");
       mpConfig();
+      if (!/^[^\s@]+@testuser[.]com$/i.test(customer_email.trim())) throw new Error("Para el checkout TEST usá el email de la cuenta compradora de prueba de Mercado Pago (@testuser.com).");
     }
     if (!Array.isArray(items) || items.length === 0 || items.length > 100 || !items.every(isOrderItem)) {
       throw new Error("El carrito contiene productos o cantidades inválidas.");
@@ -103,7 +104,7 @@ serve(async (req) => {
 
     const { data: order, error: readError } = await supabase
       .from("orders")
-      .select("id, total, status, shipping_zone, shipping_cost, shipping_time_estimate, payment_method, mp_checkout_url, mp_checkout_state")
+      .select("id, total, status, shipping_zone, shipping_cost, shipping_time_estimate, payment_method, mp_preference_id, mp_order_id, mp_checkout_url, mp_checkout_state, mp_order_request")
       .eq("id", orderId)
       .single();
 
